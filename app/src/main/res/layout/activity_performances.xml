@@ -24,11 +24,10 @@
         android:layout_width="397dp"
         android:layout_height="0dp"
         android:background="@color/colorPrimaryDark"
+        android:paddingTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2"
-        android:paddingTop="10px"
         app:menu="@menu/bottom_navigation" />
 
     <EditText
@@ -68,7 +67,6 @@
         android:id="@+id/button2"
         android:layout_width="182dp"
         android:layout_height="55dp"
-        android:layout_marginTop="648dp"
         android:layout_marginBottom="55dp"
         android:backgroundTint="@color/colorAccent"
         android:text="Criar Performance"
@@ -76,8 +74,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

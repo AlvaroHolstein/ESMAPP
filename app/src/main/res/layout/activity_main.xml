@@ -55,7 +55,7 @@
         android:id="@+id/imageView"
         android:layout_width="201dp"
         android:layout_height="113dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="64dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -65,14 +65,17 @@
         android:id="@+id/addEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="84dp"
-        android:layout_marginLeft="84dp"
-        android:layout_marginTop="38dp"
+        android:layout_marginStart="99dp"
+        android:layout_marginLeft="99dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="99dp"
+        android:layout_marginRight="99dp"
         android:backgroundTint="@color/colorPrimary"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:textColorHint="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
@@ -80,6 +83,10 @@
         android:id="@+id/addPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="99dp"
+        android:layout_marginLeft="99dp"
+        android:layout_marginEnd="99dp"
+        android:layout_marginRight="99dp"
         android:backgroundTint="@color/colorPrimary"
         android:ems="10"
         android:hint="Password"
@@ -87,7 +94,6 @@
         android:textColorHint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addEmail"
         app:layout_constraintVertical_bias="0.019" />
@@ -107,7 +113,7 @@
         android:id="@+id/login"
         android:layout_width="157dp"
         android:layout_height="46dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="12dp"
         android:backgroundTint="@color/colorAccent"
         android:text="Login"
         android:textColor="@color/colorPrimary"
@@ -120,13 +126,13 @@
         android:id="@+id/sign_in_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="136dp"
-        android:layout_marginLeft="136dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginLeft="140dp"
         android:layout_marginTop="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_button"
-        app:layout_constraintVertical_bias="0.007" />
+        app:layout_constraintVertical_bias="0.016" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
@@ -140,7 +146,7 @@
         android:layout_marginRight="99dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:layout_constraintVertical_bias="0.0" />
@@ -155,7 +161,6 @@
         android:textColor="@color/colorAccent"
         android:textSize="22dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login" />
 
@@ -163,11 +168,11 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="OU"
         android:textColor="@color/colorPrimary"
         android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createAccount" />
 
