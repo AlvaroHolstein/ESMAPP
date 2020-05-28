@@ -1,6 +1,7 @@
 package com.example.ubi_interfaces.classes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +13,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ubi_interfaces.PlayPerformance;
 import com.example.ubi_interfaces.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
-import android.os.Bundle;
+
 
 public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerformances.ViewHolder> {
 
@@ -61,8 +62,16 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
         return performances.size();
     }
 
+
+    // Ir para uma performance
     public void goToPerformance(Performance perf) {
         Log.d("perfRow", perf.getPicture() + " & " + perf.getId());
+
+        // Tenho que comçar uma atividade aqui
+        Intent playPerf = new Intent(context, PlayPerformance.class);
+
+        playPerf.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Sem isto vai dar um erro
+        context.startActivity(playPerf);
     }
 
 //    @Override
@@ -71,7 +80,9 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
         protected ImageView picture;
         protected Button btnParticipate;
 
-        public ViewHolder( View itemView) {
+        // Usei aqui o final para poder usar ao clicar no participante
+        // Mas não sei é grande ideia ter um final num parametro
+        public ViewHolder(final View itemView) {
             super(itemView);
 
 
@@ -82,12 +93,14 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
 
             Button enterParticipant = itemView.findViewById(R.id.participate);
 
-//            enterParticipant.setOnClickListener((new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.d("rvAdapter", "Entrou um participante");
-//                }
-//            }));
+            enterParticipant.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("rvAdapter", "Entrou um participante");
+                    Intent goPlay = new Intent(itemView.getContext(), PlayPerformance.class);
+                    itemView.getContext().startActivity(goPlay);
+                }
+            });
 
 
         }
