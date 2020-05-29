@@ -20,22 +20,23 @@ public class Performance {
     private int id;
     private String picture;
 
-    public void Performance (Timestamp hour, Boolean reqPass, int totalParticipants, String location, String picture) {
-        this.date = hour;
+    public Performance (Timestamp date, boolean reqPass, int totalParticipants, String location, String picture, String password) {
+        this.date = date;
         this.reqPass = reqPass;
         this.totalParticipants = totalParticipants;
         this.location = location;
         this.picture = picture;
+        this.password = password;
     }
 
 
-    public void Performance () {
+    public Performance () {
 
     }
 
     // Setters
-    public void setDate(Timestamp hour) {
-        this.date = hour;
+    public void setDate(Timestamp date) {
+        this.date = date;
     }
 
     public void setReqPass(Boolean reqPass) {
@@ -45,10 +46,6 @@ public class Performance {
 //    public void setTotalParticipants(int totalParticipants) {
 //        this.totalParticipants = totalParticipants;
 //    }
-
-    public void setLocalization(String localization) {
-        this.location = localization;
-    }
 
     public void setLocation(String location) {
         this.location = location;
@@ -116,9 +113,6 @@ public class Performance {
         return this.participantsId.size();
     }
 
-    public String getLocalization() {
-        return location;
-    }
 
     public String getPicture() { return picture; }
 

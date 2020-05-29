@@ -86,7 +86,10 @@ public class PerformancesActivity extends AppCompatActivity {
 
 
 
-    public void insertParticipant(View view) {
+    public void createPerformance(View view) {
+        Log.d("perf act", "create Performance button");
+        Intent createPerf = new Intent(getApplicationContext(), create_performance.class);
+        startActivity(createPerf);
     }
 
     //Mudar o nome da funcção

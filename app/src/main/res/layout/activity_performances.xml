@@ -14,10 +14,10 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
+        android:onClick="goLogin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo_dark"
-        android:onClick="goLogin"/>
+        app:srcCompat="@drawable/logo_dark" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -30,29 +30,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navigation" />
 
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="129dp"
-        android:layout_marginBottom="570dp"
-        android:backgroundTint="@color/colorAccent"
-        android:drawableLeft="@drawable/ic_search_black_24dp"
-        android:ems="10"
-        android:hint="Pesquisar..."
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPerf"
-        android:layout_width="350dp"
-        android:layout_height="404dp"
+        android:layout_width="349dp"
+        android:layout_height="260dp"
+        android:layout_marginTop="16dp"
         android:fadeScrollbars="false"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText3">
 
@@ -63,18 +48,34 @@
         <!--            android:orientation="vertical" />-->
     </androidx.recyclerview.widget.RecyclerView>
 
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="100dp"
+        android:backgroundTint="@color/colorAccent"
+        android:drawableLeft="@drawable/ic_search_black_24dp"
+        android:ems="10"
+        android:hint="Pesquisar..."
+        android:inputType="textPersonName"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
+
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/goToPerformancePage"
         android:layout_width="182dp"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="55dp"
         android:backgroundTint="@color/colorAccent"
+        android:onClick="createPerformance"
         android:text="Criar Performance"
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.549"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvPerf"
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
