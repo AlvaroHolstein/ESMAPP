@@ -9,6 +9,6 @@ public class settings_sound_ui extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_sound_ui);
+        setContentView(R.layout.fragment_settings_sound_ui);
     }
 }

@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ubi_interfaces.ui.performances.PerformancesActivity;
+
 public class PlayPerformance extends AppCompatActivity {
 
     String logTag = "Log Tag";

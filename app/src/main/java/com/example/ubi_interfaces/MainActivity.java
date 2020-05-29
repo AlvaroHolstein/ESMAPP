@@ -9,8 +9,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ubi_interfaces.ui.performances.PerformancesActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -26,8 +28,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginManager;
-import android.content.Context;
 
 import java.util.Arrays;
 
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         AppEventsLogger.activateApp(getApplication());
         FacebookSdk.sdkInitialize(getApplicationContext());
 
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
-                Intent intent1 = new Intent(MainActivity.this, com.example.ubi_interfaces.PerformancesActivity.class);
+                Intent intent1 = new Intent(MainActivity.this, BottomNav.class);
 
                 startActivity(intent1);
             }
@@ -150,11 +150,15 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else {
                     Log.d("ai", "lalalalalalalalalalalalalalalllllllllllllaaaaaaaaaaaaaaaa");
-                    Intent goPerf = new Intent(getApplicationContext(), PerformancesActivity.class);
+                    Intent goPerf = new Intent(getApplicationContext(), BottomNav.class);
                     startActivity(goPerf);
                 }
             }
         });
+
+
+
+
     }
 
     @Override
@@ -203,7 +207,4 @@ public class MainActivity extends AppCompatActivity {
             // updateUI(null);
         }
     }
-
-
-
 }

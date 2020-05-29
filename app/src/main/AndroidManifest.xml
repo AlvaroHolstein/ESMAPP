@@ -5,19 +5,20 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:hardwareAccelerated="false"
-        android:largeHeap="true"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".profile"></activity>
+        <activity
+            android:name=".BottomNav"
+            android:label="@string/title_activity_bottom__nav"></activity>
         <activity android:name=".create_performance" />
         <activity android:name=".settings_sound_ui" />
         <activity android:name=".Signup" />
-        <activity android:name=".PerformancesActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

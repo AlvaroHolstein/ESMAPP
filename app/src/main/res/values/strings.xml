@@ -2,4 +2,8 @@
     <string name="app_name">Ubi_interfaces</string>
     <string name="facebook_app_id">262750821544606</string>
     <string name="fb_login_protocol_scheme">fb262750821544606</string>
+    <string name="title_activity_bottom__nav">Bottom_Nav</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

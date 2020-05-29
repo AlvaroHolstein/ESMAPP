@@ -1,66 +1,67 @@
 package com.example.ubi_interfaces;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 
 import com.example.ubi_interfaces.classes.Globals;
 import com.example.ubi_interfaces.classes.Performance;
+import com.example.ubi_interfaces.ui.performances.PerformancesActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class create_performance extends AppCompatActivity {
+public class create_performance extends Fragment {
 
     Button saveNewPerf;
-    Globals globals;
+//    Globals globals;
 
 
     // Inputs
     EditText location, maxCapacity, timeStart, accessCode;
     Switch accessCodeSwitch;
+    Calendar myCalendar;
 
     // Firestore
     FirebaseFirestore db;
+    View root;
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        root = inflater.inflate(R.layout.fragment_create_performance, container, false);
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_performance);
         db = FirebaseFirestore.getInstance();
 
         Log.d("Create Perf", "ENTROU|!!!!!!!!!!!!!!!!!");
 
 
-        location = findViewById(R.id.setLocation);
-        maxCapacity = findViewById(R.id.maxCapacity);
-        timeStart = findViewById(R.id.timeStart);
-        accessCode = findViewById(R.id.accessCode);
+        location = root.findViewById(R.id.setLocation);
+        maxCapacity = root.findViewById(R.id.maxCapacity);
+        timeStart = root.findViewById(R.id.timeStart);
+        accessCode = root.findViewById(R.id.accessCode);
 
-//---------------------------------
-        // Será que vou foder isto.... Probably .... final ?????????
-        final Calendar myCalendar = Calendar.getInstance();
+        // Calendário
+        myCalendar = Calendar.getInstance();
 
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -82,19 +83,19 @@ public class create_performance extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                new DatePickerDialog(create_performance.this, date, myCalendar
+                new DatePickerDialog(getContext(), date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-//---------------------------------
+
+
         // Listener para clicar no botão.
-        saveNewPerf = (Button) findViewById(R.id.createPerformance);
+        saveNewPerf = (Button) root.findViewById(R.id.createPerformance);
         saveNewPerf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                // Fazer os getText();....................
 
                 // Gravar a performance e sair
                 // Aqui devia mandar alguma informação
@@ -139,7 +140,7 @@ public class create_performance extends AppCompatActivity {
                             public void onSuccess(Void aVoid) {
                                 Log.d("firestore", "Gravou com sucesso");
                                 // E isto só devia acontecer se tudo for gravado com sucesso
-                                Intent savePerf =  new Intent(getApplicationContext(), PerformancesActivity.class);
+                                Intent savePerf =  new Intent(getContext(), PerformancesActivity.class);
                                 startActivity(savePerf);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -152,7 +153,7 @@ public class create_performance extends AppCompatActivity {
             }
         });
 
-        accessCodeSwitch = findViewById(R.id.accessCodeSwitch); //.isChecked();
+        accessCodeSwitch = root.findViewById(R.id.accessCodeSwitch); //.isChecked();
         accessCode.setEnabled(accessCodeSwitch.isChecked());
 
         accessCodeSwitch.setOnClickListener(new View.OnClickListener() {
@@ -162,16 +163,24 @@ public class create_performance extends AppCompatActivity {
                 accessCode.setEnabled(accessCodeSwitch.isChecked());
             }
         });
+
+
+        // Botão de GoBack
+        ImageView goBack = root.findViewById(R.id.imageView12);
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Globals.goToFragment(new PerformancesActivity(), getFragmentManager());
+            }
+        });
+
+        return root;
     }
 
     private void updateLabel(String day, String month, String year) {
 
         // Mudar o valor do EditText (TimeStart)
-        timeStart = findViewById(R.id.timeStart);
+        timeStart = root.findViewById(R.id.timeStart);
         timeStart.setText(day + "/" + month + "/" + year);
-    }
-
-    public void goBack(View view) {
-        globals.goBack(getApplicationContext(), PerformancesActivity.class);
     }
 }
