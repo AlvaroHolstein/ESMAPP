@@ -153,6 +153,8 @@ public class create_performance extends AppCompatActivity {
         });
 
         accessCodeSwitch = findViewById(R.id.accessCodeSwitch); //.isChecked();
+        accessCode.setEnabled(accessCodeSwitch.isChecked());
+
         accessCodeSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
