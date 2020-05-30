@@ -15,6 +15,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class Globals {
 
+    private int currentUser;
     private static final String logTag = "Globals Tag";
 
     // Vai ser preciso mandar o contexto de certas páginas para aqui
@@ -29,7 +30,7 @@ public class Globals {
 
     }
 
-    public static void goBack(Context ctx, Class targetClass) {
+    public static void goToActivity(Context ctx, Class targetClass) {
         Intent goback = new Intent(ctx, targetClass);
         Log.d(logTag, "GO BACK!!!!!");
         goback.setFlags(FLAG_ACTIVITY_NEW_TASK);

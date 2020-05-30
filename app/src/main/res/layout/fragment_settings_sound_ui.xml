@@ -15,7 +15,7 @@
         android:layout_marginBottom="25dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/btn_confirm" />
+        app:srcCompat="@mipmap/btn_confirm" />
 
     <ImageView
         android:id="@+id/imageView10"
@@ -26,7 +26,7 @@
         android:layout_marginTop="28dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/previous_track" />
+        app:srcCompat="@mipmap/previous_track" />
 
     <TextView
         android:id="@+id/textView2"

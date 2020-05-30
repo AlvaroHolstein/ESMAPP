@@ -15,7 +15,7 @@
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="@+id/imageView14"
         app:layout_constraintStart_toEndOf="@+id/imageView14"
-        app:srcCompat="@drawable/btn_profile_pic" />
+        app:srcCompat="@mipmap/btn_profile_pic" />
 
     <!--    tools:srcCompat="@tools:sample/avatars"-->
 
@@ -157,7 +157,7 @@
         android:layout_marginTop="28dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/previous_track" />
+        app:srcCompat="@mipmap/previous_track" />
 
     <Switch
         android:id="@+id/accessCodeSwitch"

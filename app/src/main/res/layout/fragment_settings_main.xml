@@ -15,7 +15,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo_dark" />
+        app:srcCompat="@mipmap/logo_dark" />
 
     <TextView
         android:id="@+id/textView"
@@ -23,11 +23,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="167dp"
         android:layout_marginLeft="167dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="167dp"
         android:layout_marginRight="167dp"
-        android:textColor="@color/colorPrimaryDark"
         android:text="Settings"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="46dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,8 +47,8 @@
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     <LinearLayout
-        android:layout_width="391dp"
-        android:layout_height="500dp"
+        android:layout_width="393dp"
+        android:layout_height="419dp"
         android:layout_marginStart="1dp"
         android:layout_marginLeft="1dp"
         android:layout_marginTop="30dp"
@@ -58,8 +58,10 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.0">
 
         <RelativeLayout
             android:layout_width="270dp"
@@ -75,10 +77,10 @@
                 android:layout_centerVertical="true"
                 android:layout_marginBottom="14dp"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/user" />
+                app:srcCompat="@mipmap/user" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/account"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/imageView3"
@@ -89,7 +91,8 @@
                 android:layout_marginLeft="50dp"
                 android:text="Account"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="28sp" />
+                android:textSize="28sp"
+                android:clickable="true" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -105,7 +108,7 @@
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/sound" />
+                app:srcCompat="@mipmap/sound" />
 
             <TextView
                 android:id="@+id/textView7"
@@ -135,7 +138,7 @@
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/language" />
+                app:srcCompat="@mipmap/language" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -160,12 +163,12 @@
 
 
             <ImageView
-                android:id="@id/goBack"
+                android:id="@+id/goBack"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/privacy" />
+                app:srcCompat="@mipmap/privacy" />
 
             <TextView
                 android:id="@+id/textView9"

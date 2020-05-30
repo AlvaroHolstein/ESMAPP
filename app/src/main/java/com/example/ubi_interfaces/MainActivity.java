@@ -16,6 +16,10 @@ import com.example.ubi_interfaces.ui.performances.PerformancesActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.Login;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -28,6 +32,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -46,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     LoginButton login_button;
     CallbackManager callbackManager;
+    LoginManager faceboolLogin;
 
     GoogleSignInClient mGoogleSignInClient;
     SignInButton signin;
@@ -53,6 +60,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        fAuth = FirebaseAuth.getInstance();
+
+        // isto tem que ficar aqui porque é no login que começa a APP
+        if (fAuth.getCurrentUser() != null){
+//            Intent intent1 = new Intent(getApplicationContext(), BottomNav.class);
+//            startActivity(intent1);
+//            finish();
+
+            //Fazer signOut
+//            FirebaseAuth.getInstance().signOut();
+            Log.d("OH MANO", fAuth.getCurrentUser().getEmail() + " Tá AUTENTICADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            // Tenho que desautenticar o user por agora (testes)
+        }
         setContentView(R.layout.activity_login);
         AppEventsLogger.activateApp(getApplication());
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -66,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
         createAccount = findViewById(R.id.createAccount);
         signin = findViewById(R.id.sign_in_button);
 
-        fAuth = FirebaseAuth.getInstance();
 
 
         callbackManager = CallbackManager.Factory.create();
@@ -93,28 +113,54 @@ public class MainActivity extends AppCompatActivity {
 
 
         login_button = findViewById(R.id.login_button);
-        login_button.setReadPermissions(Arrays.asList(EMAIL));
+        login_button.setReadPermissions(Arrays.asList("email"));
         // If you are using in a fragment, call loginButton.setFragment(this);
 
         // Callback registration
         login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
+            public void onSuccess(final LoginResult loginResult) {
                 // App code
-                Intent intent1 = new Intent(MainActivity.this, BottomNav.class);
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                Log.v("LoginActivity", response.toString());
 
-                startActivity(intent1);
+                                // Application code
+                                try {
+                                    String email = object.getString("email");
+                                    String name = object.getString("name");
+                                    Log.d("Login Facebook", loginResult.getAccessToken().getUserId() + " Email: "  + email
+                                    + " Public profile " + name);
+                                    LoginManager logged = faceboolLogin.getInstance();
+                                    Log.d("Login Facebook", String.valueOf(logged));
+                                    Intent intent1 = new Intent(MainActivity.this, BottomNav.class);
+                                    startActivity(intent1);
+                                } catch (Exception ex) {
+                                    Log.w("Error Getting User Data", ex);
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+
             }
 
             @Override
             public void onCancel() {
+                Log.d("Login Facebook", "CANCELOU!!!!!!!!!!!!!");
                 /*Intent intent1 = new Intent(MainActivity.this, com.example.ubi_interfaces.MainActivity.class);
-
                 startActivity(intent1);*/
             }
 
             @Override
             public void onError(FacebookException exception) {
+                Log.d("Login Facebook", "ERrow ");
+                Log.w("LoginFacebook", exception);
                 //  Toast.makeText(MainActivity.this, "Error " + exception.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
