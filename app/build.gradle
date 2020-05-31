@@ -71,4 +71,15 @@ dependencies {
 
     // For the Bottom bar navigation (https://medium.com/@suragch/how-to-add-a-bottom-navigation-bar-in-android-958ed728ef6c)
 //    implementation 'com.android.support:design:28.0.0'
+
+    // SocketIO Implementation
+    implementation ('com.google.firebase:firebase-inappmessaging-display:19.0.7') {
+        exclude group: 'com.squareup.okhttp', module: 'okhttp'
+    }
+
+    implementation ('io.socket:socket.io-client:1.0.0') {
+        // excluding org.json which is provided by Android
+        //noinspection DuplicatePlatformClasses
+        exclude group: 'org.json', module: 'json'
+    }
 }
