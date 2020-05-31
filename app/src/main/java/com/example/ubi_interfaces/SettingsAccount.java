@@ -1,10 +1,8 @@
 package com.example.ubi_interfaces;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,11 +16,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.ubi_interfaces.classes.Globals;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class settings_account extends Fragment {
+public class SettingsAccount extends Fragment {
     View root;
     FirebaseAuth fAuth;
+    LoginManager fbUser;
     PopupWindow confirm;
     boolean confirmLogout = true;
 
@@ -56,10 +56,21 @@ public class settings_account extends Fragment {
                  yes.setOnClickListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View v) {
-//                         confirmLogout = true;
-                         fAuth.signOut();
-//                         Log.d("Logout", fAuth.getCurrentUser().toString());
-                         Globals.goToActivity(getContext(), MainActivity.class);
+
+                         // Fazer signOut pelo Facebook, working
+                         if(LoginManager.getInstance() != null) {
+                             LoginManager.getInstance().logOut();
+                         }
+
+                         // Fazer signOut pelo firebase (email, password)
+                         if (fAuth != null) {
+                             fAuth.signOut();
+                         }
+
+                         // Log.d("Logout", fAuth.getCurrentUser().toString());
+
+                         // Enviar para a página de login
+                         Globals.goToActivity(getContext(), Login.class);
                          confirm.dismiss();
                      }
                  });

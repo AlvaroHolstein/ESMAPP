@@ -18,7 +18,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -37,10 +36,8 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-import static android.provider.ContactsContract.Intents.Insert.EMAIL;
 
-
-public class MainActivity extends AppCompatActivity {
+public class Login extends AppCompatActivity {
 
     TextView createAccount;
     EditText addPassword;
@@ -126,17 +123,22 @@ public class MainActivity extends AppCompatActivity {
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
-                                Log.v("LoginActivity", response.toString());
+                                Log.w("LoginActivity", response.toString());
 
                                 // Application code
                                 try {
                                     String email = object.getString("email");
                                     String name = object.getString("name");
-                                    Log.d("Login Facebook", loginResult.getAccessToken().getUserId() + " Email: "  + email
-                                    + " Public profile " + name);
+                                    Log.d("Login Facebook", loginResult.getAccessToken().getUserId() +
+                                    " Email: "  + email +
+                                    " Public profile: " + name);
                                     LoginManager logged = faceboolLogin.getInstance();
                                     Log.d("Login Facebook", String.valueOf(logged));
-                                    Intent intent1 = new Intent(MainActivity.this, BottomNav.class);
+
+                                    // New User
+
+
+                                    Intent intent1 = new Intent(Login.this, BottomNav.class);
                                     startActivity(intent1);
                                 } catch (Exception ex) {
                                     Log.w("Error Getting User Data", ex);
@@ -168,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, com.example.ubi_interfaces.Signup.class);
+                Intent intent = new Intent(Login.this, com.example.ubi_interfaces.Signup.class);
 
                 startActivity(intent);
             }
@@ -192,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(addEmail.getText().toString().isEmpty() && addPassword.getText().toString().isEmpty()){
-                    Toast.makeText(MainActivity.this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     Log.d("ai", "lalalalalalalalalalalalalalalllllllllllllaaaaaaaaaaaaaaaa");
@@ -243,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            Intent intent2 = new Intent(MainActivity.this, PerformancesActivity.class);
+            Intent intent2 = new Intent(Login.this, PerformancesActivity.class);
             startActivity(intent2);
 
         } catch (ApiException e) {

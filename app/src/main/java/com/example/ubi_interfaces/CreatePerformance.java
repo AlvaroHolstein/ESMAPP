@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class create_performance extends Fragment {
+public class CreatePerformance extends Fragment {
 
     Button saveNewPerf;
 //    Globals globals;

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.ubi_interfaces.R;
 import com.example.ubi_interfaces.classes.Globals;
-import com.example.ubi_interfaces.settings_account;
+import com.example.ubi_interfaces.SettingsAccount;
 
 public class SettingsMain extends Fragment {
 
@@ -28,7 +28,7 @@ public class SettingsMain extends Fragment {
         account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Globals.goToFragment(new settings_account(), getFragmentManager());
+                Globals.goToFragment(new SettingsAccount(), getFragmentManager());
             }
         });
         return root;

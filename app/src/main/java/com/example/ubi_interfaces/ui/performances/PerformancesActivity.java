@@ -22,7 +22,7 @@ import com.example.ubi_interfaces.R;
 import com.example.ubi_interfaces.classes.Globals;
 import com.example.ubi_interfaces.classes.Performance;
 import com.example.ubi_interfaces.classes.RecyclerPerformances;
-import com.example.ubi_interfaces.create_performance;
+import com.example.ubi_interfaces.CreatePerformance;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -116,7 +116,7 @@ public class PerformancesActivity extends Fragment {
         Log.d("perf act", "create Performance button");
 
         FragmentManager fragM = getFragmentManager();
-        Globals.goToFragment(new create_performance(), fragM);
+        Globals.goToFragment(new CreatePerformance(), fragM);
     }
 
     //Mudar o nome da funcção

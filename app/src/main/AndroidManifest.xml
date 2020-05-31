@@ -16,10 +16,10 @@
         <activity
             android:name=".BottomNav"
             android:label="@string/title_activity_bottom__nav"></activity>
-        <activity android:name=".create_performance" />
-        <activity android:name=".settings_sound_ui" />
+        <activity android:name=".CreatePerformance" />
+        <activity android:name=".SettingsSound" />
         <activity android:name=".Signup" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
