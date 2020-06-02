@@ -17,6 +17,12 @@ public class BottomNav extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom__nav);
         BottomNavigationView navView = findViewById(R.id.nav_view);
+
+        // Importante
+        //Ao chegar aqui é preciso saber se está autenticado, se não estiver manda para a página de login
+        // Devia ser mais uma função para os Globls.
+
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(

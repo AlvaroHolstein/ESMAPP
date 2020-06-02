@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ubi_interfaces.ui.performances.PerformancesActivity;
@@ -27,10 +28,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONObject;
 
@@ -62,13 +66,14 @@ public class Login extends AppCompatActivity {
 
         // isto tem que ficar aqui porque é no login que começa a APP
         if (fAuth.getCurrentUser() != null){
-//            Intent intent1 = new Intent(getApplicationContext(), BottomNav.class);
-//            startActivity(intent1);
-//            finish();
+            Log.d("OH MANO", fAuth.getCurrentUser().getEmail() + " Tá AUTENTICADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+            Intent intent1 = new Intent(getApplicationContext(), BottomNav.class);
+            startActivity(intent1);
+            finish();
 
             //Fazer signOut
 //            FirebaseAuth.getInstance().signOut();
-            Log.d("OH MANO", fAuth.getCurrentUser().getEmail() + " Tá AUTENTICADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             // Tenho que desautenticar o user por agora (testes)
         }
         setContentView(R.layout.activity_login);
@@ -193,13 +198,36 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(addEmail.getText().toString().isEmpty() && addPassword.getText().toString().isEmpty()){
-                    Toast.makeText(Login.this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
+                if(!addEmail.getText().toString().isEmpty() && !addPassword.getText().toString().isEmpty()){
+                    //Importante: https://firebase.google.com/docs/auth/web/manage-users
+                    Log.d("Fields", "email: " + addEmail.getText().toString() + "\npasswrod: " + addPassword.getText().toString());
+
+                    fAuth.signInWithEmailAndPassword(addEmail.getText().toString(), addPassword.getText().toString())
+                            .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        FirebaseUser user = fAuth.getCurrentUser();
+                                        Log.d("SUCCESS", "signInWithEmail:success" + user.toString());
+
+                                        Intent goPerf = new Intent(getApplicationContext(), BottomNav.class);
+                                        startActivity(goPerf);
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Log.w("FAILURE", "signInWithEmail:failure", task.getException());
+                                        Toast.makeText(Login.this, "Authentication failed.",
+                                                Toast.LENGTH_SHORT).show();
+                                        // ...
+                                    }
+
+                                    // ...
+                                }
+                            });
+                    Log.d("ai", "lalalalalalalalalalalalalalalllllllllllllaaaaaaaaaaaaaaaa");
                 }
                 else {
-                    Log.d("ai", "lalalalalalalalalalalalalalalllllllllllllaaaaaaaaaaaaaaaa");
-                    Intent goPerf = new Intent(getApplicationContext(), BottomNav.class);
-                    startActivity(goPerf);
+                    Toast.makeText(Login.this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
                 }
             }
         });

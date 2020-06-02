@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -17,16 +18,27 @@ import android.widget.TextView;
 
 import com.example.ubi_interfaces.classes.Globals;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SettingsAccount extends Fragment {
     View root;
     FirebaseAuth fAuth;
+    FirebaseFirestore db;
     LoginManager fbUser;
     PopupWindow confirm;
     boolean confirmLogout = true;
 
     RelativeLayout logout;
+    Button confirmChanges;
+
+    EditText username, confirmPass, newPass;
      public View onCreateView(@NonNull LayoutInflater inflater,
                               ViewGroup container, Bundle savedInstanceState) {
          root = inflater.inflate(R.layout.fragment_settings_account, container, false);
@@ -38,7 +50,10 @@ public class SettingsAccount extends Fragment {
          // --------------------------------------------
          // Firebase USer
          fAuth = FirebaseAuth.getInstance();
+         db = FirebaseFirestore.getInstance();
          logout = root.findViewById(R.id.logoutBtn);
+
+         // Logout Button
          logout.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
@@ -99,6 +114,47 @@ public class SettingsAccount extends Fragment {
              }
          });
 
+
+         // Save Profile Changes Button
+         confirmChanges = root.findViewById(R.id.confirmButton);
+         confirmChanges.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 username = root.findViewById(R.id.usernameSettings);
+                 confirmPass = root.findViewById(R.id.confirmPasswordSettings);
+                 newPass = root.findViewById(R.id.newPasswordSettings);
+
+                 String name = username.getText().toString(),
+                         confPass = confirmPass.getText().toString(),
+                         nPass = newPass.getText().toString();
+                if(!name.isEmpty() || !confPass.isEmpty() || !nPass.isEmpty()) {
+                        // Só dá para alterar o username, e pass?
+                        Map<String, Object> user = new HashMap<>();
+                        if(!name.isEmpty()) user.put("name", name);
+//                        if(!confPass.isEmpty() && !nPass.isEmpty())
+
+                        db.collection("users").document(fAuth.getUid())
+                                .update(user)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("SUCESS", "User Modificafo");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d("FAILURE", "User NÂO Modificafo");
+                                    }
+                                });
+                }
+                else {
+                    Snackbar.make(root.findViewById(R.id.accountSettings),"Pelo menos um campo tem que estar preenchido",
+                            Snackbar.LENGTH_SHORT)
+                            .show();
+                }
+             }
+         });
          return root;
     }
 }
