@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 //import com.google.firebase.database.DatabaseError;
 //import com.google.firebase.database.DatabaseReference;
@@ -24,34 +26,40 @@ import com.example.ubi_interfaces.classes.Performance;
 import com.example.ubi_interfaces.classes.RecyclerPerformances;
 import com.example.ubi_interfaces.CreatePerformance;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PerformancesActivity extends Fragment {
+    View root;
 
     FirebaseFirestore db;
+
     RecyclerView rvPerf;
     private List<Performance> performances = new ArrayList<Performance>();
-
-    final private String perfTag = "perfTag";
-
     /* Grab RecyclerView */
     private RecyclerPerformances perfAdapter;
 
-    View root;
+    final private String perfTag = "perfTag";
+
     private PerformancesViewModel performancesViewModel;
 
-    //
+    SearchView searchBox;
     public View onCreateView(@NonNull LayoutInflater inflater,
                                 ViewGroup container, Bundle savedInstanceState) {
-         root = inflater.inflate(R.layout.fragment_performances, container, false);
+
+        root = inflater.inflate(R.layout.fragment_performances, container, false);
 
         db = FirebaseFirestore.getInstance();
+
         // Write a message to the database
 //        DatabaseReference myRef = database.getReference("message");
 //        myRef.setValue("Hello, World!");
@@ -62,6 +70,7 @@ public class PerformancesActivity extends Fragment {
 
         LinearLayoutManager llm = new LinearLayoutManager(root.getContext());
         rvPerf.setLayoutManager(llm);
+
         // Read from database
         db.collection("performances")
                 .get()
@@ -107,8 +116,27 @@ public class PerformancesActivity extends Fragment {
             }
         });
 
+        searchBox = root.findViewById(R.id.search);
+        searchBox.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("Search", "ONSubmit: " + query);
+                perfAdapter.filterPerformances(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                perfAdapter.filterPerformances(newText);
+                return false;
+            }
+        });
+
+
         return root;
     }
+
+
 
 
 
@@ -118,7 +146,6 @@ public class PerformancesActivity extends Fragment {
         FragmentManager fragM = getFragmentManager();
         Globals.goToFragment(new CreatePerformance(), fragM);
     }
-
     //Mudar o nome da funcção
     // Nem sempre vai ser para ir para o login....
     public void goLogin() { // é como se fosse um go back

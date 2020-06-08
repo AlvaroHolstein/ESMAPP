@@ -1,8 +1,8 @@
 package com.example.ubi_interfaces.ui.settings_main;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;

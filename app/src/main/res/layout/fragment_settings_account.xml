@@ -186,7 +186,7 @@
         android:layout_marginTop="28dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/previous_track" />
+        android:background="@mipmap/previous_track" />
 
     <!--    tools:srcCompat="@tools:sample/avatars" />-->
 

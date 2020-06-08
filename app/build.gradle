@@ -82,4 +82,10 @@ dependencies {
         //noinspection DuplicatePlatformClasses
         exclude group: 'org.json', module: 'json'
     }
+
+    // Permission asking thing
+    implementation 'com.karumi:dexter:6.1.2'
+
+    // Storage Firebase (Para guardar imagens)
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
 }

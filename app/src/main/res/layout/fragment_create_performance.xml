@@ -6,21 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".CreatePerformance">
 
-    <ImageView
+    <Button
         android:id="@+id/browseImage"
         android:layout_width="54dp"
         android:layout_height="37dp"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView14"
-        app:layout_constraintStart_toEndOf="@+id/imageView14"
-        app:srcCompat="@mipmap/btn_profile_pic" />
+        app:layout_constraintBottom_toBottomOf="@+id/selectedImage"
+        app:layout_constraintStart_toEndOf="@+id/selectedImage"
+        android:background="@mipmap/btn_profile_pic" />
 
     <!--    tools:srcCompat="@tools:sample/avatars"-->
 
     <ImageView
-        android:id="@+id/imageView14"
+        android:id="@+id/selectedImage"
         android:layout_width="103dp"
         android:layout_height="97dp"
         android:layout_marginTop="12dp"
@@ -74,7 +74,7 @@
         android:textSize="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView12" />
+        app:layout_constraintTop_toBottomOf="@+id/goBackCreatePerformance" />
 
     <EditText
         android:id="@+id/setLocation"
@@ -134,30 +134,29 @@
             android:textSize="20dp" />
     </LinearLayout>
 
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="397dp"
         android:layout_height="0dp"
+        android:layout_marginTop="744dp"
         android:background="@color/colorPrimaryDark"
         android:paddingTop="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu">
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-    <ImageView
-        android:id="@+id/imageView12"
+    <Button
+        android:id="@+id/goBackCreatePerformance"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:clickable="true"
         android:layout_marginStart="28dp"
         android:layout_marginLeft="28dp"
         android:layout_marginTop="28dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/previous_track" />
+        android:background="@mipmap/previous_track" />
 
     <Switch
         android:id="@+id/accessCodeSwitch"

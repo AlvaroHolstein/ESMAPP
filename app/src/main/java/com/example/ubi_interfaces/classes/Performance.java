@@ -19,14 +19,16 @@ public class Performance {
     private List<Integer> participantsId;
     private int id;
     private String picture;
+//    private boolean active;
 
-    public Performance (Timestamp date, boolean reqPass, int totalParticipants, String location, String picture, String password) {
+    public Performance (Timestamp date, boolean reqPass, int totalParticipants, String location, String picture, String password, List<Integer> participantsId) {
         this.date = date;
         this.reqPass = reqPass;
         this.totalParticipants = totalParticipants;
         this.location = location;
         this.picture = picture;
         this.password = password;
+        this.participantsId = participantsId;
     }
 
 
@@ -73,6 +75,12 @@ public class Performance {
 
     public void setPicture(String picture) { this.picture = picture; }
 
+    public void addParticipantId(int id) {
+        if(id > 0) {
+            this.participantsId.add(id);
+        }
+    }
+
 
     // Getters
     public String getLocation() {
@@ -110,7 +118,7 @@ public class Performance {
     }
 
     public int getTotalParticipants() {
-        return this.participantsId.size();
+        return this.totalParticipants;
     }
 
 

@@ -87,6 +87,7 @@ public class Signup extends AppCompatActivity {
 
                                 Map<String, Object> newUserData = new HashMap<>();
                                 newUserData.put("name", createUsername.getText().toString());
+                                newUserData.put("email", createEmail.getText().toString());
                                 newUserData.put("password", createPassword.getText().toString());
 
                                 // Criar utilizador na firestore/base

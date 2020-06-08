@@ -13,7 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.ubi_interfaces.ui.performances.PerformancesActivity;
+import com.example.ubi_interfaces.classes.Globals;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -61,6 +61,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
         fAuth = FirebaseAuth.getInstance();
 
@@ -68,15 +69,13 @@ public class Login extends AppCompatActivity {
         if (fAuth.getCurrentUser() != null){
             Log.d("OH MANO", fAuth.getCurrentUser().getEmail() + " Tá AUTENTICADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-            Intent intent1 = new Intent(getApplicationContext(), BottomNav.class);
-            startActivity(intent1);
+            Globals.goToActivity(getApplicationContext(), BottomNav.class);
             finish();
 
             //Fazer signOut
 //            FirebaseAuth.getInstance().signOut();
             // Tenho que desautenticar o user por agora (testes)
         }
-        setContentView(R.layout.activity_login);
         AppEventsLogger.activateApp(getApplication());
         FacebookSdk.sdkInitialize(getApplicationContext());
 
@@ -143,8 +142,7 @@ public class Login extends AppCompatActivity {
                                     // New User
 
 
-                                    Intent intent1 = new Intent(Login.this, BottomNav.class);
-                                    startActivity(intent1);
+                                    Globals.goToActivity(getApplicationContext(), BottomNav.class);
                                 } catch (Exception ex) {
                                     Log.w("Error Getting User Data", ex);
                                 }
@@ -160,8 +158,6 @@ public class Login extends AppCompatActivity {
             @Override
             public void onCancel() {
                 Log.d("Login Facebook", "CANCELOU!!!!!!!!!!!!!");
-                /*Intent intent1 = new Intent(MainActivity.this, com.example.ubi_interfaces.MainActivity.class);
-                startActivity(intent1);*/
             }
 
             @Override
@@ -273,7 +269,7 @@ public class Login extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            Intent intent2 = new Intent(Login.this, PerformancesActivity.class);
+            Intent intent2 = new Intent(Login.this, BottomNav.class);
             startActivity(intent2);
 
         } catch (ApiException e) {

@@ -35,26 +35,32 @@ public class Profile extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
-        Log.d("fragments", "Profile");
+        Log.d("fragments", "Profile + " + currentUser);
 
         // Registar insstancia da firestore
         db = FirebaseFirestore.getInstance();
 
-        db.collection("users").document(currentUser.getUid())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Log.d("GetUSer", String.valueOf(documentSnapshot));
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("GetUSer", e);
-                    }
-                });
+        try {
+            db.collection("users").document(currentUser.getUid())
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Log.d("GetUSer", String.valueOf(documentSnapshot));
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("GetUSer", e);
+                        }
+                    });
 
+        } catch (Exception ex) {
+            // Podiamos mandar o user de volta para a página de Login
+            Log.w("Error in profile", ex);
+            ex.printStackTrace();
+        }
 
         // Registar os pfu...
         profilePic = root.findViewById(R.id.profilePic);
