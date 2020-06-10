@@ -88,7 +88,6 @@ public class CreatePerformance extends Fragment {
         fs = FirebaseStorage.getInstance();
 
 
-        Log.d("Create Perf", "ENTROU|!!!!!!!!!!!!!!!!!");
 
 
         location = root.findViewById(R.id.setLocation);
@@ -181,7 +180,6 @@ public class CreatePerformance extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Log.d("firestore", "Gravou com sucesso");
                                 // E isto só devia acontecer se tudo for gravado com sucesso
                                 Globals.goToFragment(new PerformancesActivity(), getFragmentManager());
                             }
@@ -202,7 +200,6 @@ public class CreatePerformance extends Fragment {
         accessCodeSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Switch Button", String.valueOf(accessCodeSwitch.isChecked()) + " --- Location Text: " + location.getText());
                 accessCode.setEnabled(accessCodeSwitch.isChecked());
             }
         });
@@ -239,7 +236,6 @@ public class CreatePerformance extends Fragment {
         // Alterei o valore da CAMERA para 1, se der merda pode ser por causa disso
 
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("ACtivity result", "RequestCode: " + requestCode + "\n ResultCode: " + resultCode);
         if (resultCode == RESULT_CANCELED) {
             return;
         }
@@ -344,13 +340,11 @@ public class CreatePerformance extends Fragment {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                     // ...
-                    Log.d("imageResult", String.valueOf(taskSnapshot));
                     Log.d("imageResultDetails", String.valueOf(taskSnapshot.getMetadata()));
                     imageRef.child("performances/" + imageName).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
                             // Got the download URL for 'users/me/profile.png'
-                            Log.d("image", uri.toString());
                             imageNameGlobal = imageName;
                             Picasso.get().load(uri.toString()).resize(50, 50).into(imageView);
                         }

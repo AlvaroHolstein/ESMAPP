@@ -66,7 +66,6 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
             @Override
             public void onSuccess(Uri uri) {
                 // Got the download URL for 'users/me/profile.png'
-                Log.d("image", uri.toString());
                 Picasso.get().load(uri.toString()).resize(50, 50).into(auxVh.picture);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -86,10 +85,10 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
         vh.btnParticipate.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-        goToPerformance(performances.get(index));
+                goToPerformance(performances.get(index));
 
-        // Falta fazer Udpate À lista de performances
-        // Enviar para o ecrã de tocar perfomance
+                // Falta fazer Udpate À lista de performances
+                // Enviar para o ecrã de tocar perfomance
             }
         }));
     }
@@ -106,12 +105,9 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
 
 
             for(Performance perf : performancesCopy) {
-                Log.d("Search", "OntextChange: " + perf.getLocation().toUpperCase().contains(text.toUpperCase()));
-                if(perf.getLocation().toUpperCase().contains(text.toUpperCase())) {
-                    Log.d("Search", "Entrou" + text);
-
+               if(perf.getLocation().toUpperCase().contains(text.toUpperCase())) {
                     performances.add(perf);
-                }
+               }
             }
         }
         else {
@@ -121,7 +117,6 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
     }
     // Ir para uma performance
     public void goToPerformance(Performance perf) {
-        Log.d("perfRow", perf.getPicture() + " & " + perf.getId());
 
         // Tenho que comçar uma atividade aqui
         Intent playPerf = new Intent(context, PlayPerformance.class);
@@ -155,7 +150,6 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
             enterParticipant.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("rvAdapter", "Entrou um participante");
                     Intent goPlay = new Intent(itemView.getContext(), PlayPerformance.class);
                     itemView.getContext().startActivity(goPlay);
                 }

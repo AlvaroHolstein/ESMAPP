@@ -21,7 +21,6 @@ public class SettingsMain extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_settings_main, container, false);
-        Log.d("fragments", "SEtings");
 
         // Go to Account
         account = root.findViewById(R.id.account);

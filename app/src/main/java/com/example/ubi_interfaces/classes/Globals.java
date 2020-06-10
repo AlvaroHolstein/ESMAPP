@@ -14,10 +14,12 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 // Também é  preciso importar a da __google__
 
@@ -27,7 +29,6 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class Globals {
 
-    private User currentUser; // Vai ser o
     private static final String logTag = "Globals Tag";
 
     // Vai ser preciso mandar o contexto de certas páginas para aqui
@@ -43,7 +44,6 @@ public class Globals {
 
     public static void goToActivity(Context ctx, Class targetClass) {
         Intent goback = new Intent(ctx, targetClass);
-        Log.d(logTag, "GO BACK!!!!!");
         goback.setFlags(FLAG_ACTIVITY_NEW_TASK);
         ctx.startActivity(goback);
     }
@@ -56,44 +56,42 @@ public class Globals {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    public User setUser(User user) {
-        return user;
-    }
+//    public User setUser(User user) {
+//        return user;
+//    }
 
     //Não tou a coseguit.........................................................................................................
-//    public User getCurrentUser(AccessToken accessToken) {
-//        FirebaseAuth fAuth = FirebaseAuth.getInstance();
-//        CallbackManager callbackManager;
-//        LoginManager facebookLogin = LoginManager.getInstance();
-//        GoogleSignInClient mGoogleSignInClient;
-//        User currentUser = null;
-//        if(fAuth != null) {
-//            currentUser = new User(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getEmail(), "");
-//        }
-//        if(accessToken != null) {
-//            GraphRequest request = GraphRequest.newMeRequest(
-//                    accessToken,
-//                    new GraphRequest.GraphJSONObjectCallback() {
-//                        @Override
-//                        public void onCompleted(
-//                                JSONObject object,
-//                                GraphResponse response) {
-//                            // Application code
-//
-//                           try  {
-//                                = new User(object.getString("id"), object.getString("email"), object.getString("name"));
-//                           } catch(Exception ex) {
-//                               Log.w("Globals Tag", ex);
-//                           }
-//                        }
-//                    });
-//            Bundle parameters = new Bundle();
-//            parameters.putString("fields", "id,name,email, link");
-//            request.setParameters(parameters);
-//            request.executeAsync();
-//        }
-//
-//
-//        return currentUser;
-//    }
+    public static User getCurrentUser() {
+        /* Get firebase instance */
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        FirebaseUser fUser = fAuth.getCurrentUser();
+        /* Get Facebook user (if any) */
+        Profile fbUser = Profile.getCurrentProfile();
+        User user;
+        String id = null, email = null, name = null, authType = null;
+
+
+        Log.d("User firebase Globals", String.valueOf(fUser)); // Depois de estar logado isto fica preenchido (fAuth.getCurrentUserProfile)
+        Log.d("User Facebook Globals", String.valueOf(Profile.getCurrentProfile())); // Depois de estar logado isto fica preenchido (Profile.getCurrentProfile)
+
+        /* Get user from firebase (if any) */
+        if(fAuth.getCurrentUser() != null) {
+            Log.d("User firebase Globals", "é firebase " + String.valueOf(fUser));
+            id = fUser.getUid();
+            email = fUser.getEmail();
+            name = fUser.getDisplayName();
+            authType = "firebase";
+        }
+        /* Get USer Facebook */
+        else if(fbUser != null) {
+            Log.d("User facebook Globals", "é facebook " + String.valueOf(fbUser.getId()) + " -- " + fbUser.getFirstName() + " -- " + fbUser.getName()); // Não tem email...
+            id = fbUser.getId();
+            name = fbUser.getFirstName();
+            authType = "facebook";
+            /* Para o email devo precisar de usar o graphRequest */
+        }
+
+        user = new User(id, email, name, authType);
+        return user;
+    }
 }

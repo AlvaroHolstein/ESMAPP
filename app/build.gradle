@@ -64,9 +64,9 @@ dependencies {
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    // Google auth
-    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
     // Facebook auth
+    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+    // Google auth
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
 
     // For the Bottom bar navigation (https://medium.com/@suragch/how-to-add-a-bottom-navigation-bar-in-android-958ed728ef6c)
@@ -88,4 +88,7 @@ dependencies {
 
     // Storage Firebase (Para guardar imagens)
     implementation 'com.google.firebase:firebase-storage:19.1.1'
+
+    // PAra o tabLayout
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 }

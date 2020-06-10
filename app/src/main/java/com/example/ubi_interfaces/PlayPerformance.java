@@ -69,14 +69,12 @@ public class PlayPerformance extends AppCompatActivity {
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                Log.d("call!!!", "Entrei");
             }
         }).on("newConnection", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 try {
-                    String mamas = String.valueOf(args);
-                    Log.d("call!!!", "Recebido - " + String.valueOf(mamas));
+                    String text = String.valueOf(args);
                 } catch (Exception ex) {
                     Log.w("Error !!!", ex);
                     ex.printStackTrace();
@@ -87,7 +85,6 @@ public class PlayPerformance extends AppCompatActivity {
             public void call(Object... args) {
                 try {
                     String nUsers = String.valueOf(args);
-                    Log.d("Nº USERS !!!!!", String.valueOf(nUsers));
                 } catch (Exception ex) {
                     Log.w("Error !!!", ex);
                     ex.printStackTrace();
@@ -107,7 +104,6 @@ public class PlayPerformance extends AppCompatActivity {
                     case MotionEvent.ACTION_MOVE:
                         contador++;
 
-                        Log.d(logTag, "MOVE values: (" + String.valueOf(x) + " : " + String.valueOf(y) + ")" + " CONTADOR: " + contador);
                         if(contador > 5) { // Para determinar o "ritmo" podemos fazer por contador ou por timeouts mas JAVA.....
                             contador = 0;
                             socket.emit("musicnote", x + ":" + y);
@@ -116,11 +112,9 @@ public class PlayPerformance extends AppCompatActivity {
                         // Estes os dois ainda não tenho a certeza de como funceminam
                     case MotionEvent.ACTION_DOWN:
                         contador++;
-                        Log.d(logTag, "DOWN values: (" + String.valueOf(x) + " : " + String.valueOf(y) + ")" );
                         break;
                     case MotionEvent.ACTION_UP:
                         contador++;
-                        Log.d(logTag, "UP values: (" + String.valueOf(x) + " : " + String.valueOf(y) + ")" );
                     break;
 //                    default:
 //                        throw new IllegalStateException("Unexpected value: " + eve.getAction());
@@ -145,7 +139,6 @@ public class PlayPerformance extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(logTag, "disconnecting OnDestoy");
         socket.disconnect();
     }
 }

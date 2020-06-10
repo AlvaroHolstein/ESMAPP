@@ -22,7 +22,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".BottomNav"
-            android:label="@string/title_activity_bottom__nav"></activity>
+            android:label="@string/title_activity_bottom__nav" />
         <activity android:name=".CreatePerformance" />
         <activity android:name=".SettingsSound" />
         <activity android:name=".Signup" />

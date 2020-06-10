@@ -80,17 +80,13 @@ public class PerformancesActivity extends Fragment {
                        if(task.isSuccessful()) {
                            // Working til here...
                            for (QueryDocumentSnapshot document : task.getResult()) {
-                               Log.d(perfTag, document.getId() + "=>"
-                               + document.getData());
+//                               Log.d(perfTag, document.getId() + "=>"
+//                               + document.getData());
                                Performance perf = document.toObject(Performance.class);
-//                               Log.d(perfTag, String.valueOf(new Date(perf.getDate())));
-//                               Log.d(perfTag, perf.getData());
                                performances.add(perf);
-
                            }
                            perfAdapter = new RecyclerPerformances(root.getContext(), performances);
 
-                           Log.d(perfTag, performances.toString());
                            //perfAdapter = new RecyclerPerformances(performances);
                            rvPerf.setAdapter(perfAdapter);
                        } else {
@@ -120,7 +116,6 @@ public class PerformancesActivity extends Fragment {
         searchBox.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.d("Search", "ONSubmit: " + query);
                 perfAdapter.filterPerformances(query);
                 return false;
             }
@@ -141,7 +136,6 @@ public class PerformancesActivity extends Fragment {
 
 
     public void createPerformance() {
-        Log.d("perf act", "create Performance button");
 
         FragmentManager fragM = getFragmentManager();
         Globals.goToFragment(new CreatePerformance(), fragM);

@@ -44,8 +44,6 @@ public class SettingsAccount extends Fragment {
          root = inflater.inflate(R.layout.fragment_settings_account, container, false);
 
 
-        Log.d("Setttings Accpuont", "ENTROU NO settings account");
-
 
          // --------------------------------------------
          // Firebase USer
@@ -82,7 +80,6 @@ public class SettingsAccount extends Fragment {
                              fAuth.signOut();
                          }
 
-                         // Log.d("Logout", fAuth.getCurrentUser().toString());
 
                          // Enviar para a página de login
                          Globals.goToActivity(getContext(), Login.class);
@@ -93,7 +90,6 @@ public class SettingsAccount extends Fragment {
                      @Override
                      public void onClick(View v) {
                          confirmLogout = false;
-                         Log.d("Logout SO que nao", fAuth.getCurrentUser().toString());
                          confirm.dismiss();
                      }
                  });
@@ -138,13 +134,11 @@ public class SettingsAccount extends Fragment {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Log.d("SUCESS", "User Modificafo");
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Log.d("FAILURE", "User NÂO Modificafo");
                                     }
                                 });
                 }
