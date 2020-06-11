@@ -3,6 +3,7 @@ package com.example.ubi_interfaces.ui.profile;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +39,9 @@ public class Profile extends Fragment {
     TextView name, username;
 
     FirebaseFirestore db;
+    FirebaseStorage fs;
+    StorageReference sr;
+
     User currentUser;
 
 //    FrameLayout frmLayout;
@@ -46,12 +53,22 @@ public class Profile extends Fragment {
 
         // Registar insstancia da firestore
         db = FirebaseFirestore.getInstance();
+        fs = FirebaseStorage.getInstance();
+        sr = fs.getReference();
 
         /* Ir buscar o currentUser*/
         currentUser = Globals.getCurrentUser();
         Log.d("USer No Profile", currentUser.getName() + " --- " + currentUser.getId());
 
+
+        // Registar os pfu...
+        profilePic = root.findViewById(R.id.profilePic);
+        name = root.findViewById(R.id.name);
+        username = root.findViewById(R.id.username);
+
+
         try {
+            /* Get Current User Profile information */
             db.collection("users").document(currentUser.getId())
                     .get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -76,6 +93,34 @@ public class Profile extends Fragment {
 
                         currentUser.setName(us.getName());
                         name.setText(currentUser.getName());
+
+                        /* Get user image, tem que ser destinguido se é:
+                        * Imagem que o user tem do face -> começa com https://graph.facebook.com/
+                        * Url Externo -> começa com http://
+                        * Imagem que está na Storage não começa com http://
+                        * if (us.getPicture().startsWith("https://graph.facebook.com")) {
+                            Picasso.get().load("https://graph.facebook.com/" + currentUser.getId() + "/picture?type=normal").resize(50, 50).into(profilePic);
+                        }
+                        else
+                        */
+                        if (us.getPicture().startsWith("http")) {
+                            Picasso.get().load("https://graph.facebook.com/" + currentUser.getId() + "/picture?type=normal").resize(50, 50).into(profilePic);
+                        }
+                        else {
+                            sr.child(us.getPicture()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    // Got the download URL for 'users/me/profile.png'
+                                    Picasso.get().load(uri.toString()).resize(50, 50).into(profilePic);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    // Handle any errors, podiamos por uma imagem de erro também
+                                    exception.printStackTrace();
+                                }
+                            });
+                        }
                     }
                 }
             });
@@ -85,13 +130,6 @@ public class Profile extends Fragment {
             Log.w("Error in profile", ex);
             ex.printStackTrace();
         }
-
-        // Registar os pfu...
-        profilePic = root.findViewById(R.id.profilePic);
-        name = root.findViewById(R.id.name);
-        username = root.findViewById(R.id.username);
-
-        // Receber dados e mostrar
 
         return root;
     }

@@ -36,10 +36,18 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Login extends AppCompatActivity {
@@ -49,18 +57,24 @@ public class Login extends AppCompatActivity {
     EditText addEmail;
     Button login;
     TextView changePassword;
+
+    /* Autenticações */
     FirebaseAuth fAuth;
     LoginButton login_button_facebook;
     CallbackManager callbackManager;
     LoginManager facebookLogin;
-
     GoogleSignInClient mGoogleSignInClient;
     SignInButton signinGoogle;
 
+    /* Base de Dados */
+    FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        /* Base de Dados */
+        db = FirebaseFirestore.getInstance();
 
         /* Get firebase instance */
         fAuth = FirebaseAuth.getInstance();
@@ -94,8 +108,8 @@ public class Login extends AppCompatActivity {
 
         // isto tem que ficar aqui porque é no login que começa a APP
         /* Apenas login com mail e password */
-        if (fAuth.getCurrentUser() != null){ // É sito que vou usar para saber se o user está autenticado pelo firebase
-
+        Log.d("Globlas.GetCurrentUser", "Globals: " + String.valueOf(Globals.getCurrentUser().getId()));
+        if (Globals.getCurrentUser().getId() != null){ // É sito que vou usar para saber se o user está autenticado pelo firebase
             Globals.goToActivity(getApplicationContext(), BottomNav.class);
             finish();
 
@@ -134,24 +148,71 @@ public class Login extends AppCompatActivity {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 Log.w("LoginActivity", response.toString());
-                                /* NA response vem o
+                                /* Na response vem o
                                 * id
                                 * name
                                 * email*/
 
                                 // Application code
                                 try {
-                                    String email = object.getString("email");
-                                    String name = object.getString("name");
-//                                    Log.d("Login Facebook", loginResult.getAccessToken().getUserId() +
-//                                    " Email: "  + email +
-//                                    " Public profile: " + name);
+                                    final String email = object.getString("email");
+                                    final String name = object.getString("name");
+                                    final String id = object.getString("id");
+                                    Log.d("Login Facebook", loginResult.getAccessToken().getUserId() +
+                                    " --- Id:" + id +
+                                    " Email: "  + email +
+                                    " Public profile: " + name);
+
+                                    /* Ques esto */
                                     LoginManager logged = facebookLogin.getInstance();
                                     Log.d("Login Facebook", String.valueOf(logged));
 
                                     // New User
-                                    // Adicionar o user à BD, mas primeiro confirmar se ele já não existe (pelo id).
+                                    DocumentReference docRef = db.collection("users").document(id);
+                                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if(task.isSuccessful()) {
+                                                DocumentSnapshot doc = task.getResult();
+                                                Log.d("Login Facebook", "Resultado -- " + doc.getData());
 
+                                                if(doc.exists()) {
+                                                    Log.d("Login facebook", "O utilizador já existe " + String.valueOf(doc.getData()));
+                                                }
+                                                else {
+                                                    /* Guardar o user na Base de Dados */
+                                                    Log.d("Login Facebook", "O User não existe por isso é preciso guarda lo na Basd de Dados");
+                                                    // Adicionar o user à BD, mas primeiro confirmar se ele já não existe (pelo id).
+                                                    Map<String, Object> newUserData = new HashMap<>();
+                                                    newUserData.put("name", name);
+                                                    newUserData.put("email", email);
+//                                                    newUserData.put("id", id);
+                                                    newUserData.put("achievments", new HashMap<Integer, String>());
+
+                                                    // https://stackoverflow.com/questions/19855072/android-get-facebook-profile-picture
+                                                    newUserData.put("picture", "https://graph.facebook.com/" + id + "/picture?type=normal"); // Aqui devia ser a fotografia que o user tem no face, mas ele pode mudar depois...
+                                                    newUserData.put("performanceId", -1);
+                                                    newUserData.put("authType", "facebook");
+                                                    Log.d("Login Facebook", String.valueOf(newUserData));
+
+                                                    db.collection("users").document(id)
+                                                            .set(newUserData)
+                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    if(task.isSuccessful()) {
+                                                                        Log.d("Login Facebook", "User Inserido na BD depois de login pelo Face !!!");
+                                                                    }
+                                                                    else {
+                                                                        Log.d("ERROR Login Facebook", "O user Não fi Inserido !!!!");
+                                                                    }
+                                                                }
+                                                            });
+
+                                                }
+                                            }
+                                        }
+                                    });
 
                                     Globals.goToActivity(getApplicationContext(), BottomNav.class);
                                 } catch (Exception ex) {
@@ -177,7 +238,7 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        /* Login com email e password ATENÇÂO: o firebase não guarda a pass ... */
+        /* Login com email e password ATENÇÂO: o firebase não guarda a pass ... Update: em texto e visivel, mas acaba por guardar.... */
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -270,5 +331,10 @@ public class Login extends AppCompatActivity {
             e.printStackTrace();
             // updateUI(null);
         }
+    }
+
+    /* Funções auxiliares ao login com o face ou google */
+    private void checkIfUserExists(String id) {
+
     }
 }

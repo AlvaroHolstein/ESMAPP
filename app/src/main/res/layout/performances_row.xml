@@ -9,20 +9,21 @@
         android:id="@+id/performacePicture"
         android:layout_width="48dp"
         android:layout_height="50dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.008"
+        app:layout_constraintHorizontal_bias="0.011"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/hora"
-        android:layout_width="150dp"
+        android:layout_width="162dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="68dp"
         android:text="12h00"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.072"
+        app:layout_constraintHorizontal_bias="0.055"
         app:layout_constraintStart_toEndOf="@+id/performacePicture"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,12 +31,12 @@
         android:id="@+id/reqPass"
         android:layout_width="50dp"
         android:layout_height="18dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/hora"
-        app:layout_constraintTop_toTopOf="parent" >
-<!--        android:drawableLeft="@mipmap/privacy"-->
+        app:layout_constraintStart_toEndOf="@+id/localization"
+        app:layout_constraintTop_toTopOf="parent">
+        <!--        android:drawableLeft="@mipmap/privacy"-->
         <ImageView
             android:layout_width="20dp"
             android:layout_height="match_parent"
@@ -59,8 +60,8 @@
         android:id="@+id/totalParticipants"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="16dp"
         android:text="10"
         app:layout_constraintStart_toEndOf="@+id/reqPass"
@@ -68,28 +69,32 @@
 
     <TextView
         android:id="@+id/localization"
-        android:layout_width="120dp"
-        android:layout_height="19dp"
+        android:layout_width="174dp"
+        android:layout_height="48dp"
         android:layout_marginStart="12dp"
         android:layout_marginLeft="12dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        android:layout_marginBottom="12dp"
+        android:maxWidth="100dp"
         android:text="localization"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/participate"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/performacePicture" />
+        app:layout_constraintHorizontal_bias="0.096"
+        app:layout_constraintStart_toEndOf="@+id/performacePicture"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:maxWidth="180dp" />
 
     <Button
         android:id="@+id/participate"
-        android:layout_width="145dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="200dp"
-        android:layout_marginLeft="200dp"
-        android:layout_marginTop="52dp"
+        android:layout_width="105dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="240dp"
+        android:layout_marginLeft="240dp"
+        android:layout_marginTop="40dp"
         android:onClick="insertParticipant"
         android:text="Participate"
+        android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.ubi_interfaces.classes.Globals;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -52,15 +53,6 @@ public class Signup extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
 
-        goLogIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Signup.this, Login.class);
-
-                startActivity(intent);
-            }
-        });
-
         buttonSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,20 +77,27 @@ public class Signup extends AppCompatActivity {
                                 FirebaseUser newUser = fAuth.getCurrentUser();
                                 String uid = newUser.getUid();
 
+
+                                /* Acho que não vai ser preciso o user id, para além dos users autenticados pelo face ou google */
                                 Map<String, Object> newUserData = new HashMap<>();
                                 newUserData.put("name", createUsername.getText().toString());
                                 newUserData.put("email", createEmail.getText().toString());
-                                newUserData.put("password", createPassword.getText().toString());
+                                // newUserData.put("password", createPassword.getText().toString()); Não é preciso guardar isto na BD, já é gradado na autenticação do firebase
+                                newUserData.put("achievments", new HashMap<Integer, String>());
+                                newUserData.put("picture", "users/default_user_image.jpeg");
+                                newUserData.put("performanceId", -1);
+                                newUserData.put("authType", "firebase");
 
-                                // Criar utilizador na firestore/base
+
+
+                                // Criar utilizador na firestore
                                 db.collection("users").document(uid)
                                         .set(newUserData)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Log.w("RegisterUSer", String.valueOf(n));
-                                                Intent intent = new Intent(getApplicationContext(), BottomNav.class);
-                                                startActivity(intent);
+                                                Globals.goToActivity(getApplicationContext(), BottomNav.class);
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -116,6 +115,14 @@ public class Signup extends AppCompatActivity {
                         }
                     });
                 }
+            }
+        });
+
+        /* Bot\ao para ir para o login */
+        goLogIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Globals.goToActivity(getApplicationContext(), Login.class);
             }
         });
     }

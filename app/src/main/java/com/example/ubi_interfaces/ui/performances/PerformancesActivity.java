@@ -29,12 +29,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +76,8 @@ public class PerformancesActivity extends Fragment {
 
         // Read from database
         db.collection("performances")
+//                .whereGreaterThanOrEqualTo("date", Timestamp.now())
+                .orderBy("date", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -83,6 +88,8 @@ public class PerformancesActivity extends Fragment {
 //                               Log.d(perfTag, document.getId() + "=>"
 //                               + document.getData());
                                Performance perf = document.toObject(Performance.class);
+
+                                Log.d("Dates Comparing", "Date: " + new Timestamp(perf.getDate()).toDate() + " ---- " + Timestamp.now().toDate().toString());
                                performances.add(perf);
                            }
                            perfAdapter = new RecyclerPerformances(root.getContext(), performances);

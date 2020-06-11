@@ -22,7 +22,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -57,28 +59,50 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
 
         fs = FirebaseStorage.getInstance();
         storageRef = fs.getReference();
-//        StorageReference islandRef = storageRef.child("vdc.jpg");
         index = i;
         final ViewHolder auxVh = vh;
 
-        // Isto depois vai ser substituido pelo perf.getPicture()
-        storageRef.child("performances/" + perf.getPicture()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                // Got the download URL for 'users/me/profile.png'
-                Picasso.get().load(uri.toString()).resize(50, 50).into(auxVh.picture);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-                exception.printStackTrace();
-            }
-        });
+        if(perf.getPicture() == null) {
+            // Default image if there isnt one, TODO depois temos que mudar a default image
+            storageRef.child("performances/bar.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    // Got the download URL for 'users/me/profile.png'
+                    Picasso.get().load(uri.toString()).resize(50, 50).into(auxVh.picture);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                    exception.printStackTrace();
+                }
+            });
+        }
+        else if(perf.getPicture().startsWith("http")){
+            Picasso.get().load(perf.getPicture()).resize(50, 50).into(auxVh.picture);
+        }
+        else {
+            storageRef.child("performances/" + perf.getPicture()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    // Got the download URL for 'users/me/profile.png'
+                    Picasso.get().load(uri.toString()).resize(50, 50).into(auxVh.picture);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                    exception.printStackTrace();
+                }
+            });
+
+        }
 
         // Mostrar uma data mais adequada
         String total = String.valueOf(perf.getParticipantsId() == null ? 0 : perf.getParticipantsId().size()) + "/" + String.valueOf(perf.getTotalParticipants());
-        vh.date.setText(perf.getDate().toString());
+        SimpleDateFormat sfd = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+
+        vh.date.setText(sfd.format(perf.getDate()));
         vh.location.setText("Location " + perf.getLocation());
         vh.reqPass.setText(perf.getReqPass() ? "Yes" : "No");
         vh.totalParticipants.setText(total);

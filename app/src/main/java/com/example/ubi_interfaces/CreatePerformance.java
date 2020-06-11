@@ -42,6 +42,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -108,6 +109,7 @@ public class CreatePerformance extends Fragment {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
                 Log.d("Calendar", String.valueOf(dayOfMonth) + "/" + String.valueOf(monthOfYear) + "/" + String.valueOf(year));
                 updateLabel(String.valueOf(dayOfMonth), String.valueOf(monthOfYear), String.valueOf(year));
             }
@@ -136,21 +138,25 @@ public class CreatePerformance extends Fragment {
                 // Gravar a performance e sair
                 // Aqui devia mandar alguma informação
                 String locationValue = location.getText().toString(),
-                accessCodeValue = accessCode.getText().toString(), maxCapacityValue = maxCapacity.getText().toString() ;
-                Date date = new Date();
+                accessCodeValue = accessCode.getText().toString(), maxCapacityValue = maxCapacity.getText().toString();
+                Calendar date = Calendar.getInstance();
                 try {
-                    SimpleDateFormat d = new SimpleDateFormat("DD/MM/YYY", Locale.UK);
-                    date = d.parse(timeStart.getText().toString());
+                    String[] dateArr = timeStart.getText().toString().split("/");
+
+                    date.set(Calendar.YEAR, Integer.parseInt(dateArr[2]));
+                    date.set(Calendar.MONTH, Integer.parseInt(dateArr[1]));
+                    date.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateArr[0]));
                 } catch (Exception ex) {
                     Log.e("Date Error", ex.toString());
                 }
 
-                Performance newPerf = new Performance(new Timestamp(date),
+                // Default image once upon a time
+                // "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.vox-cdn.com%2Fthumbor%2FFgiZSpHjp1vcKkV0PrdRppJszhA%3D%2F0x0%3A960x960%2F1200x800%2Ffilters%3Afocal(404x404%3A556x556)%2Fcdn.vox-cdn.com%2Fuploads%2Fchorus_image%2Fimage%2F58799523%2F14915318_10155148305236754_7471955098066766739_n.0.png&f=1&nofb=1",
+                Performance newPerf = new Performance(new Timestamp(new Date(date.getTime().toString())),
                         accessCodeSwitch.isChecked(),
-                        3,
+                        Integer.parseInt(maxCapacityValue),
                         locationValue,
                         imageNameGlobal == null || imageNameGlobal == "" ? "bar.jpg" : imageNameGlobal, // bar.jpg default para quando não há foto
-//                        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.vox-cdn.com%2Fthumbor%2FFgiZSpHjp1vcKkV0PrdRppJszhA%3D%2F0x0%3A960x960%2F1200x800%2Ffilters%3Afocal(404x404%3A556x556)%2Fcdn.vox-cdn.com%2Fuploads%2Fchorus_image%2Fimage%2F58799523%2F14915318_10155148305236754_7471955098066766739_n.0.png&f=1&nofb=1",
                         accessCodeValue,
                         new ArrayList<Integer>());
 
@@ -164,7 +170,8 @@ public class CreatePerformance extends Fragment {
                 Map<String, Object> performance = new HashMap<>();
                 performance.put("active", false);
                 performance.put("adminId", 999); //Ainda é preciso tratar do utilizador direito para fazer esta parte
-                performance.put("date", new Timestamp(newPerf.getDate()));
+                performance.put("date", newPerf.getDate());
+                performance.put("createDate", Timestamp.now());
 //                performance.put("duration", 999); Isto é um campo para meter depois?
 //                performance.put("id", 999);
                 performance.put("location", newPerf.getLocation());
@@ -341,7 +348,7 @@ public class CreatePerformance extends Fragment {
                     // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                     // ...
                     Log.d("imageResultDetails", String.valueOf(taskSnapshot.getMetadata()));
-                    imageRef.child("performances/" + imageName).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
                             // Got the download URL for 'users/me/profile.png'
@@ -352,6 +359,7 @@ public class CreatePerformance extends Fragment {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
                             // Handle any errors
+                            imageNameGlobal = imageName;
                             Log.w("ERro gravar imagem 2º!!", exception);
                         }
                     });
@@ -360,7 +368,7 @@ public class CreatePerformance extends Fragment {
             return imageName;
         } catch (Exception e1) {
             e1.printStackTrace();
-        }
+    }
         return "";
     }
 
@@ -368,6 +376,8 @@ public class CreatePerformance extends Fragment {
     private void updateLabel(String day, String month, String year) {
         // Mudar o valor do EditText (TimeStart)
         timeStart = root.findViewById(R.id.timeStart);
+        month = String.valueOf(Integer.parseInt(month) + 1);
         timeStart.setText(day + "/" + month + "/" + year);
+        Log.d("DATE updateLabel !!!", String.valueOf(new Date( month + "/" + day + "/" + year)));
     }
 }
