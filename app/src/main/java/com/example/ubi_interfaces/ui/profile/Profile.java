@@ -2,6 +2,7 @@ package com.example.ubi_interfaces.ui.profile;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,29 +10,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ubi_interfaces.R;
 import com.example.ubi_interfaces.classes.Globals;
-import com.example.ubi_interfaces.classes.Performance;
 import com.example.ubi_interfaces.classes.User;
+import com.example.ubi_interfaces.ui.profile.tabLayout.ProfileAchievments;
+import com.example.ubi_interfaces.ui.profile.tabLayout.ProfilePerformances;
+import com.example.ubi_interfaces.ui.profile.tabLayout.ViewPageAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Profile extends Fragment {
 
@@ -44,14 +41,21 @@ public class Profile extends Fragment {
 
     User currentUser;
 
-//    FrameLayout frmLayout;
-    TabLayout tabLayout;
 
+    // Tab Layout
+    TabLayout tabLayout;
+    ViewPager viewPager;
+
+    private ProfileAchievments profileAchievments;
+    private ProfilePerformances profilePerformances;
+
+
+    // https://www.youtube.com/watch?v=eXK4VMI9XLI
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        // Registar insstancia da firestore
+        // Registar instancia da firestore
         db = FirebaseFirestore.getInstance();
         fs = FirebaseStorage.getInstance();
         sr = fs.getReference();
@@ -66,6 +70,24 @@ public class Profile extends Fragment {
         name = root.findViewById(R.id.name);
         username = root.findViewById(R.id.username);
 
+
+        /* Tab Layout */
+        tabLayout = root.findViewById(R.id.tabLayout);
+        viewPager = root.findViewById(R.id.viewPager);
+
+        profileAchievments = new ProfileAchievments();
+        profilePerformances = new ProfilePerformances();
+
+        tabLayout.setupWithViewPager(viewPager);
+
+
+        assert getFragmentManager() != null; // Não sei o que isto faz, mas não tenho o
+        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getFragmentManager(), 0);
+
+        viewPageAdapter.addFragment(profileAchievments, "Achievments");
+        viewPageAdapter.addFragment(profilePerformances, "Performances");
+
+        viewPager.setAdapter(viewPageAdapter);
 
         try {
             /* Get Current User Profile information */

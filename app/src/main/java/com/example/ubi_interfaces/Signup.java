@@ -83,7 +83,7 @@ public class Signup extends AppCompatActivity {
                                 newUserData.put("name", createUsername.getText().toString());
                                 newUserData.put("email", createEmail.getText().toString());
                                 // newUserData.put("password", createPassword.getText().toString()); Não é preciso guardar isto na BD, já é gradado na autenticação do firebase
-                                newUserData.put("achievments", new HashMap<Integer, String>());
+                                newUserData.put("achievments", new HashMap<String, Integer>());
                                 newUserData.put("picture", "users/default_user_image.jpeg");
                                 newUserData.put("performanceId", -1);
                                 newUserData.put("authType", "firebase");

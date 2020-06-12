@@ -1,5 +1,6 @@
-package com.example.ubi_interfaces.classes;
+package com.example.ubi_interfaces.ui.performances;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ubi_interfaces.PlayPerformance;
 import com.example.ubi_interfaces.R;
+import com.example.ubi_interfaces.classes.Performance;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -24,7 +26,6 @@ import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -99,18 +100,19 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
         }
 
         // Mostrar uma data mais adequada
-        String total = String.valueOf(perf.getParticipantsId() == null ? 0 : perf.getParticipantsId().size()) + "/" + String.valueOf(perf.getTotalParticipants());
-        SimpleDateFormat sfd = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        String total = String.valueOf(perf.getParticipantsId() == null ? 0 : perf.getParticipantsId().size()) + "/" + perf.getTotalParticipants();
+        Log.d("TOTAL!!!!!!!", total);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sfd = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
         vh.date.setText(sfd.format(perf.getDate()));
-        vh.location.setText("Location " + perf.getLocation());
+        vh.location.setText(String.format("Location %s", perf.getLocation()));
         vh.reqPass.setText(perf.getReqPass() ? "Yes" : "No");
         vh.totalParticipants.setText(total);
         vh.btnParticipate.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("Button goToPerf", String.valueOf(performances.get(index)));
                 goToPerformance(performances.get(index));
-
                 // Falta fazer Udpate À lista de performances
                 // Enviar para o ecrã de tocar perfomance
             }
@@ -143,6 +145,8 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
     public void goToPerformance(Performance perf) {
 
         // Tenho que comçar uma atividade aqui
+
+        // Esta funcção pode dar jeito porque vai ser preciso enviar informação para a página de play performance
         Intent playPerf = new Intent(context, PlayPerformance.class);
 
         playPerf.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Sem isto vai dar um erro
@@ -160,26 +164,12 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
         public ViewHolder(final View itemView) {
             super(itemView);
 
-
-
             date = itemView.findViewById(R.id.hora);
             picture = itemView.findViewById(R.id.performacePicture);
             btnParticipate = itemView.findViewById(R.id.participate);
             location = itemView.findViewById(R.id.localization);
             reqPass = itemView.findViewById(R.id.reqPassText);
             totalParticipants = itemView.findViewById(R.id.totalParticipants);
-
-            Button enterParticipant = itemView.findViewById(R.id.participate);
-
-            enterParticipant.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent goPlay = new Intent(itemView.getContext(), PlayPerformance.class);
-                    itemView.getContext().startActivity(goPlay);
-                }
-            });
-
-
         }
 
     }

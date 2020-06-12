@@ -81,6 +81,7 @@ public class CreatePerformance extends Fragment {
     StorageReference imageRef;
     // Porque é um fragment
     View root;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_create_performance, container, false);
@@ -158,7 +159,7 @@ public class CreatePerformance extends Fragment {
                         locationValue,
                         imageNameGlobal == null || imageNameGlobal == "" ? "bar.jpg" : imageNameGlobal, // bar.jpg default para quando não há foto
                         accessCodeValue,
-                        new ArrayList<Integer>());
+                        new ArrayList<String>());
 
                 Log.d("savePerf",
                 "Location: " + newPerf.getLocation() +
@@ -169,7 +170,7 @@ public class CreatePerformance extends Fragment {
 
                 Map<String, Object> performance = new HashMap<>();
                 performance.put("active", false);
-                performance.put("adminId", 999); //Ainda é preciso tratar do utilizador direito para fazer esta parte
+                performance.put("adminId", "999"); //Ainda é preciso tratar do utilizador direito para fazer esta parte
                 performance.put("date", newPerf.getDate());
                 performance.put("createDate", Timestamp.now());
 //                performance.put("duration", 999); Isto é um campo para meter depois?

@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
@@ -23,22 +22,18 @@ import android.widget.SearchView;
 import com.example.ubi_interfaces.R;
 import com.example.ubi_interfaces.classes.Globals;
 import com.example.ubi_interfaces.classes.Performance;
-import com.example.ubi_interfaces.classes.RecyclerPerformances;
 import com.example.ubi_interfaces.CreatePerformance;
+import com.example.ubi_interfaces.classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PerformancesActivity extends Fragment {
@@ -56,6 +51,7 @@ public class PerformancesActivity extends Fragment {
     private PerformancesViewModel performancesViewModel;
 
     SearchView searchBox;
+    User currentUser;
     public View onCreateView(@NonNull LayoutInflater inflater,
                                 ViewGroup container, Bundle savedInstanceState) {
 
@@ -75,26 +71,26 @@ public class PerformancesActivity extends Fragment {
         rvPerf.setLayoutManager(llm);
 
         // Read from database
+        // Vai ter que ser um filtro pelas que o user criou ou participou, e vamos ter que distinguir las
         db.collection("performances")
-//                .whereGreaterThanOrEqualTo("date", Timestamp.now())
                 .orderBy("date", Query.Direction.DESCENDING)
+//                .whereGreaterThan("date", Timestamp.now().toDate())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                        if(task.isSuccessful()) {
-                           // Working til here...
                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                               Log.d(perfTag, document.getId() + "=>"
-//                               + document.getData());
                                Performance perf = document.toObject(Performance.class);
 
-                                Log.d("Dates Comparing", "Date: " + new Timestamp(perf.getDate()).toDate() + " ---- " + Timestamp.now().toDate().toString());
-                               performances.add(perf);
+                                Log.d("Dates Comparing", "Date: " + new Timestamp(perf.getDate()).toDate() + " ---- " + Timestamp.now().toDate().toString() + " --- "
+                                        + (Long.parseLong(String.valueOf(new Timestamp(perf.getDate()).getSeconds())) > Long.parseLong(String.valueOf(Timestamp.now().getSeconds()))));
+                               if(Long.parseLong(String.valueOf(new Timestamp(perf.getDate()).getSeconds())) > Long.parseLong(String.valueOf(Timestamp.now().getSeconds()))){
+                                   performances.add(perf);
+                               }
                            }
                            perfAdapter = new RecyclerPerformances(root.getContext(), performances);
 
-                           //perfAdapter = new RecyclerPerformances(performances);
                            rvPerf.setAdapter(perfAdapter);
                        } else {
                            Log.w(perfTag, "Erro ao receber documents"

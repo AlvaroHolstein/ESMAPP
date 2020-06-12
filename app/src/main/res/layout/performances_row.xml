@@ -56,16 +56,32 @@
             android:text="Yes" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/totalParticipants"
+    <RelativeLayout
+        android:id="@+id/totalParticipantsWrap"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="16dp"
-        android:text="10"
         app:layout_constraintStart_toEndOf="@+id/reqPass"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:contentDescription="Requires Password"
+
+            android:src="@mipmap/user" />
+
+        <TextView
+            android:id="@+id/totalParticipants"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:text="10"
+            app:layout_constraintTop_toTopOf="parent" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/localization"

@@ -187,7 +187,7 @@ public class Login extends AppCompatActivity {
                                                     newUserData.put("name", name);
                                                     newUserData.put("email", email);
 //                                                    newUserData.put("id", id);
-                                                    newUserData.put("achievments", new HashMap<Integer, String>());
+                                                    newUserData.put("achievments", new HashMap<String, String>());
 
                                                     // https://stackoverflow.com/questions/19855072/android-get-facebook-profile-picture
                                                     newUserData.put("picture", "https://graph.facebook.com/" + id + "/picture?type=normal"); // Aqui devia ser a fotografia que o user tem no face, mas ele pode mudar depois...

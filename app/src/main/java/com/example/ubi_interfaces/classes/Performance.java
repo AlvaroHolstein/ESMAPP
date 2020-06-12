@@ -14,14 +14,14 @@ public class Performance {
     private int totalParticipants;
     private String location;
     private String password;
-    private int adminId;
+    private String adminId;
     private int duration;
-    private List<Integer> participantsId;
+    private List<String> participantsId;
     private int id;
     private String picture;
 //    private boolean active;
 
-    public Performance (Timestamp date, boolean reqPass, int totalParticipants, String location, String picture, String password, List<Integer> participantsId) {
+    public Performance (Timestamp date, boolean reqPass, int totalParticipants, String location, String picture, String password, List<String> participantsId) {
         this.date = date;
         this.reqPass = reqPass;
         this.totalParticipants = totalParticipants;
@@ -57,7 +57,7 @@ public class Performance {
         this.password = password;
     }
 
-    public void setAdminId(int adminId) {
+    public void setAdminId(String adminId) {
         this.adminId = adminId;
     }
 
@@ -75,8 +75,8 @@ public class Performance {
 
     public void setPicture(String picture) { this.picture = picture; }
 
-    public void addParticipantId(int id) {
-        if(id > 0) {
+    public void addParticipantId(String id) {
+        if(Integer.parseInt(id) > 0) {
             this.participantsId.add(id);
         }
     }
@@ -91,7 +91,7 @@ public class Performance {
         return password;
     }
 
-    public int getAdminId() {
+    public String getAdminId() {
         return adminId;
     }
 
@@ -99,7 +99,7 @@ public class Performance {
         return duration;
     }
 
-    public List<Integer> getParticipantsId() {
+    public List<String> getParticipantsId() {
         return participantsId;
     }
 
