@@ -65,8 +65,10 @@ public class Performance {
         this.duration = duration;
     }
 
-    public void setParticipants(int[] participants) {
-        this.participantsId = participantsId;
+    public void setParticipants(String[] participants) {
+        for(int i = 0; i< participants.length; i++) {
+            this.participantsId.add(participants[i]);
+        }
     }
 
     public void setId(String id) {
@@ -111,7 +113,7 @@ public class Performance {
     public Date getDate() { return date.toDate(); }
 
     public Boolean getReqPass() {
-        if(this.password == "") this.reqPass = false;
+        if(this.password.equals("")) this.reqPass = false;
         else this.reqPass = true;
 
         return this.reqPass;
