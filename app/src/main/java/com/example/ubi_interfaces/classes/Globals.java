@@ -17,6 +17,7 @@ import com.facebook.CallbackManager;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.internal.instrument.InstrumentUtility;
 import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -34,6 +35,7 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +44,8 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 public class Globals {
 
     private static final String logTag = "Globals Tag";
+    public static Instrument instrument = new Instrument();
+    public static List<Instrument> instruments = new ArrayList<>();
 
     // Vai ser preciso mandar o contexto de certas páginas para aqui
     private Context ctx;
@@ -114,5 +118,14 @@ public class Globals {
 //        final User[] anodaOne = new User[1]; que caralhos é isto...
 
         return new User(id, email, name, authType, achis.length != 0 ? achis[0] : null);
+    }
+
+    public static Instrument currentInstrument() {
+        Log.d("Instrument Globals", String.valueOf(Globals.instrument));
+        return Globals.instrument;
+    }
+
+    public static void setInstrument(Instrument inst) {
+        Globals.instrument = inst;
     }
 }

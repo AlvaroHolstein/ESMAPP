@@ -18,6 +18,7 @@ import android.widget.SearchView;
 
 import com.example.ubi_interfaces.R;
 import com.example.ubi_interfaces.classes.Globals;
+import com.example.ubi_interfaces.classes.Instrument;
 import com.example.ubi_interfaces.classes.Performance;
 import com.example.ubi_interfaces.CreatePerformance;
 import com.example.ubi_interfaces.classes.User;
@@ -129,13 +130,31 @@ public class PerformancesActivity extends Fragment {
             }
         });
 
+        /* Get All Instruments in the begining of the app*/
+        getInstruments();
 
         return root;
     }
 
 
 
+    public void getInstruments() {
+        db.collection("instruments")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            Globals.instruments.clear(); // Limpar o array
+                            for(QueryDocumentSnapshot doc : task.getResult()) {
+                                Instrument instr = doc.toObject(Instrument.class);
 
+                                Globals.instruments.add(instr);
+                            }
+                        }
+                    }
+                });
+    }
 
     public void createPerformance() {
 

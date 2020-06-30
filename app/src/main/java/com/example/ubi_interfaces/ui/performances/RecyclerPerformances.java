@@ -24,7 +24,6 @@ import com.example.ubi_interfaces.PlayPerformance;
 import com.example.ubi_interfaces.R;
 import com.example.ubi_interfaces.classes.Globals;
 import com.example.ubi_interfaces.classes.Performance;
-import com.example.ubi_interfaces.dialogs.PassCheckEnterPerformance;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;

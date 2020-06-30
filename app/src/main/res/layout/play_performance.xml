@@ -48,13 +48,25 @@
 
     <Button
         android:id="@+id/instruments"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="152dp"
-        android:layout_marginLeft="152dp"
-        android:layout_marginTop="16dp"
-        app:srcCompat="@mipmap/music_note"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginLeft="144dp"
+        android:layout_marginTop="32dp"
+        android:background="@mipmap/music_note"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playit" />
+
+    <TextView
+        android:id="@+id/current_instrument"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="164dp"
+        android:layout_marginLeft="164dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/instruments"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playit"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

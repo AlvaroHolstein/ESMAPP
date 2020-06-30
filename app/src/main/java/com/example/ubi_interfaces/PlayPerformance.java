@@ -2,6 +2,7 @@ package com.example.ubi_interfaces;
 
 import android.annotation.SuppressLint;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ubi_interfaces.classes.Globals;
 import com.example.ubi_interfaces.classes.Performance;
@@ -33,7 +36,9 @@ public class PlayPerformance extends AppCompatActivity {
     LinearLayout checkTouch;
     private String socketLabelError = "Error in Socket";
     int contador = 0;
-    TextView numberOfUsers;
+    TextView numberOfUsers, currentInst;
+    /* Usar uma imageView para mostrar o instrumento selecionado */
+    Button chooseInstrument;
 
     /* Firebase */
     FirebaseFirestore db;
@@ -55,6 +60,9 @@ public class PlayPerformance extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         numberOfUsers = findViewById(R.id.numberOfUsers);
+        chooseInstrument = findViewById(R.id.instruments);
+        currentInst = findViewById(R.id.current_instrument);
+        currentInst.setText(Globals.instrument == null ? "None" : Globals.instrument.getName());
 
         /* Get Performance Information */
         perfId = getIntent().getStringExtra("id");
@@ -156,6 +164,23 @@ public class PlayPerformance extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Globals.goToActivity(getApplicationContext(), BottomNav.class);
+            }
+        });
+        /* Show instruments Dialog */
+        chooseInstrument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog choose = new Dialog(PlayPerformance.this);
+                choose.setCancelable(false);
+                choose.setCanceledOnTouchOutside(true);
+                choose.setContentView(R.layout.instruments_dialog);
+
+                RecyclerView recyclerView = choose.findViewById(R.id.instruments_recycler);
+                InstrumentsDialogRecycler adapterRe = new InstrumentsDialogRecycler(PlayPerformance.this, Globals.instruments, choose, currentInst);
+                recyclerView.setAdapter(adapterRe);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+
+                choose.show();
             }
         });
     }
