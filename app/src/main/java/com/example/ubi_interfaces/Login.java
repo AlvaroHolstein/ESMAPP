@@ -58,7 +58,7 @@ public class Login extends AppCompatActivity {
     Button login;
     TextView changePassword;
 
-    /* Autenticações */
+    /* Autenticações. */
     FirebaseAuth fAuth;
     LoginButton login_button_facebook;
     CallbackManager callbackManager;
