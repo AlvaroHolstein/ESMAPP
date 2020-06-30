@@ -1,6 +1,7 @@
 package com.example.ubi_interfaces.ui.performances;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -47,6 +48,9 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
 
     private FirebaseStorage fs;
     private StorageReference storageRef;
+
+    /* Dialog */
+    public static Dialog dialog;
 
     public RecyclerPerformances(Context context, List<Performance> performances) {
         this.performances  = performances;
@@ -122,58 +126,18 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
                 if(performances.get(index).getReqPass()) {
                     Globals.perf = performances.get(index);
 
-                    LayoutInflater li = LayoutInflater.from(context);
-                    View passCheck = li.inflate(R.layout.password_dialog, null);
+                    showDialog();
+//                    LayoutInflater li = LayoutInflater.from(context);
+//                    View passCheck = li.inflate(R.layout.password_dialog, null);
 
-                    AlertDialog.Builder check = new AlertDialog.Builder(context, R.layout.password_dialog);
-                    final EditText pass = passCheck.findViewById(R.id.passCheck);
+//                    AlertDialog.Builder check = new AlertDialog.Builder(context, R.layout.password_dialog);
 
 
 
-                    check.setCancelable(true)
-                            .setPositiveButton("Confirm",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Log.d("Pass check", "PassVal: " + pass.getText().toString().equals("") + "/ Per pass: " + Globals.perf.getPassword() + " ---- " + String.valueOf(pass));
-
-                                            if(pass.getText().toString().equals("")) {
-                                                try {
-
-                                                    dialog.wait();
-                                                    pass.setError("Required");
-                                                } catch (Exception ex) {
-                                                    Log.d("Fodeu", "Fodeu no primeiro wait");
-                                                }
-                                            }
-                                            else if (pass.getText().toString().equals(Globals.perf.getPassword())) {
-                                                /* campeão */
-                                                Log.d("Campeão", "champ");
-                                                Globals.goToActivity(context, PlayPerformance.class);
-                                            }
-                                            else {
-                                                try {
-
-                                                    dialog.wait();
-                                                    pass.setError("Not valid!!!!!");
-                                                } catch (Exception ex) {
-                                                    Log.d("Fodeu", "Fodeu no SEGUNDO wait");
-                                                }
-                                            }
-
-                                        }
-                                    })
-                            .setNegativeButton("Cancel",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Log.d("A", "Ata caralho");
-                                            dialog.cancel();
-                                        }
-                                    });
-                    AlertDialog alertDialog = check.create();
-                    alertDialog.setView(passCheck);
-                    alertDialog.show();
+//
+//                    AlertDialog alertDialog = check.create();
+//                    alertDialog.setView(passCheck);
+//                    alertDialog.show();
                     /*
                     Dialog dialog = new Dialog(context);
                     dialog.setContentView(R.layout.password_dialog);
@@ -248,5 +212,64 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
             totalParticipants = itemView.findViewById(R.id.totalParticipants);
         }
 
+    }
+
+    public void showDialog() {
+        dialog = new Dialog(context);
+        // dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+
+        dialog.setContentView(R.layout.password_dialog);
+
+        final EditText pass = dialog.findViewById(R.id.passCheck);
+
+
+
+        /* Confrim */
+        Button confirmDialogBtn = dialog.findViewById(R.id.confirm);
+        confirmDialogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                        Log.d("Pass check", "PassVal: " + pass.getText().toString().equals("") + "/ Per pass: " + Globals.perf.getPassword() + " ---- " + String.valueOf(pass));
+
+                        if(pass.getText().toString().equals("")) {
+                                pass.setError("Required");
+                        }
+                        else if (pass.getText().toString().equals(Globals.perf.getPassword())) {
+                            /* campeão */
+                            Log.d("Campeão", "champ");
+                            goToPerformance(Globals.perf);
+                        }
+                        else {
+                                pass.setError("Not valid!!!!!");
+                        }
+
+                    }
+
+        });
+
+        /* Cancel */
+        Button cancelDialogBtn = (Button) dialog.findViewById(R.id.cancel);
+        cancelDialogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+            }
+        });
+
+//        RecyclerView recyclerView = dialog.findViewById(R.id.recycler);
+//        AdapterRe adapterRe = new AdapterRe(MainActivity.this,myImageNameList);
+//        recyclerView.setAdapter(adapterRe);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+
+//        recyclerView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
+
+        dialog.show();
     }
 }
