@@ -1,4 +1,5 @@
 package com.example.ubi_interfaces.classes;
+
 import android.util.Log;
 
 import java.util.HashMap;
@@ -13,7 +14,7 @@ public class User {
     String picture; //Não sei see vai ser sempre String por causa de guardar as imagens na base de dados
     boolean currentUser; // Saber se o user está a ver o perfil dele ou nao
     String tagName = "USER Class";
-    Map<String, Integer> achievments = new HashMap<>();
+    Map<String, Integer> achievements;
 
     /* Os AuthType vão ser
     * firebase
@@ -25,11 +26,12 @@ public class User {
 
     }
 
-    public User(String id, String email, String name, String authType) {
+    public User(String id, String email, String name, String authType, Map<String, Integer>... achievements) {
         this.id = id;
         this.authType = authType;
         this.email = email;
         this.name = name;
+        this.achievements = achievements.length != 0 ? achievements[0] : null;
     }
 
     // Função que devolve o utilizador logado
@@ -75,8 +77,13 @@ public class User {
         return true;
     }
 
-    public Map<String, Integer> getAchievments() { return this.achievments; }
+    public Map<String, Integer> getAchievements() {
+        Log.d("Achievments User Class", String.valueOf(this.achievements));
+        return this.achievements; }
+    public void setAchievements(Map<String, Integer> achis) {
+        this.achievements = achis;
+    }
     public void addAchievment(String idAchievment, Integer totalPoints) {
-        this.achievments.put(idAchievment, totalPoints);
+        this.achievements.put(idAchievment, totalPoints);
     }
 }

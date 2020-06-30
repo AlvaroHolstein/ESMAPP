@@ -10,14 +10,16 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
+import androidx.annotation.NonNull;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ubi_interfaces.classes.Globals;
-import com.example.ubi_interfaces.ui.performances.PerformancesActivity;
+import com.example.ubi_interfaces.classes.Performance;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONObject;
 
@@ -33,20 +35,45 @@ public class PlayPerformance extends AppCompatActivity {
     int contador = 0;
     TextView numberOfUsers;
 
+    /* Firebase */
+    FirebaseFirestore db;
 
     // Socekt
     private Socket socket;
     private String uri = "http://192.168.1.6:3001";
     private String username = "user1";
+    private String perfId;
 
-    @SuppressLint("ClickableViewAccessibility") // Porque??? nao sei bem
+    private Performance performance;
+
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.play_performance);
 
+        db = FirebaseFirestore.getInstance();
         numberOfUsers = findViewById(R.id.numberOfUsers);
 
+        /* Get Performance Information */
+        perfId = getIntent().getStringExtra("id");
+        db.collection("performances").document(perfId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        DocumentSnapshot doc = task.getResult();
+
+                        performance = doc.toObject(Performance.class);
+
+                        /* Para não ser null \*/
+                        assert performance != null;
+                        performance.setId(doc.getId());
+
+                        Log.d("PErf Play Perf!", performance.getLocation() + " -- " + performance.getId());
+                    }
+                });
         // Inicializar Socket
         try {
             socket = IO.socket(uri);
@@ -132,8 +159,6 @@ public class PlayPerformance extends AppCompatActivity {
             }
         });
     }
-
-
 
 
     @Override

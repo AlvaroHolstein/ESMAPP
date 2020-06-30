@@ -84,7 +84,7 @@ public class Profile extends Fragment {
         assert getFragmentManager() != null; // Não sei o que isto faz, mas não tenho o
         ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getFragmentManager(), 0);
 
-        viewPageAdapter.addFragment(profileAchievments, "Achievments");
+        viewPageAdapter.addFragment(profileAchievments, "Achievements");
         viewPageAdapter.addFragment(profilePerformances, "Performances");
 
         viewPager.setAdapter(viewPageAdapter);
@@ -96,7 +96,7 @@ public class Profile extends Fragment {
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Log.d("Depois de ir à BD", currentUser.getName() + " --- " + currentUser.getId());
+                            Log.d("Depois de ir à BD", currentUser.getName() + " --- " + currentUser.getId()+ " -- " + currentUser.getAchievements());
                             Log.d("SUCCESS", String.valueOf(documentSnapshot));
                         }
                     })
@@ -112,7 +112,7 @@ public class Profile extends Fragment {
                         Log.d("SUCCESS ONCOMplete", String.valueOf(task.getResult().getData()));
                         DocumentSnapshot doc = task.getResult();
                         User us = doc.toObject(User.class);
-
+                        us.setAchievements(us.getAchievements());
                         currentUser.setName(us.getName());
                         name.setText(currentUser.getName());
 

@@ -1,7 +1,10 @@
 package com.example.ubi_interfaces.ui.performances;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -9,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,9 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ubi_interfaces.PlayPerformance;
 import com.example.ubi_interfaces.R;
+import com.example.ubi_interfaces.classes.Globals;
 import com.example.ubi_interfaces.classes.Performance;
+import com.example.ubi_interfaces.dialogs.PassCheckEnterPerformance;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -112,10 +119,76 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
             @Override
             public void onClick(View v) {
                 Log.d("Button goToPerf", String.valueOf(performances.get(index)));
-                goToPerformance(performances.get(index));
-                // Falta fazer Udpate À lista de performances
-                // Enviar para o ecrã de tocar perfomance
-            }
+                if(performances.get(index).getReqPass()) {
+                    Globals.perf = performances.get(index);
+
+                    LayoutInflater li = LayoutInflater.from(context);
+                    View passCheck = li.inflate(R.layout.password_dialog, null);
+
+                    AlertDialog.Builder check = new AlertDialog.Builder(context, R.layout.password_dialog);
+                    final EditText pass = passCheck.findViewById(R.id.passCheck);
+
+
+
+                    check.setCancelable(true)
+                            .setPositiveButton("Confirm",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Log.d("Pass check", "PassVal: " + pass.getText().toString().equals("") + "/ Per pass: " + Globals.perf.getPassword() + " ---- " + String.valueOf(pass));
+
+                                            if(pass.getText().toString().equals("")) {
+                                                try {
+
+                                                    dialog.wait();
+                                                    pass.setError("Required");
+                                                } catch (Exception ex) {
+                                                    Log.d("Fodeu", "Fodeu no primeiro wait");
+                                                }
+                                            }
+                                            else if (pass.getText().toString().equals(Globals.perf.getPassword())) {
+                                                /* campeão */
+                                                Log.d("Campeão", "champ");
+                                                Globals.goToActivity(context, PlayPerformance.class);
+                                            }
+                                            else {
+                                                try {
+
+                                                    dialog.wait();
+                                                    pass.setError("Not valid!!!!!");
+                                                } catch (Exception ex) {
+                                                    Log.d("Fodeu", "Fodeu no SEGUNDO wait");
+                                                }
+                                            }
+
+                                        }
+                                    })
+                            .setNegativeButton("Cancel",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Log.d("A", "Ata caralho");
+                                            dialog.cancel();
+                                        }
+                                    });
+                    AlertDialog alertDialog = check.create();
+                    alertDialog.setView(passCheck);
+                    alertDialog.show();
+                    /*
+                    Dialog dialog = new Dialog(context);
+                    dialog.setContentView(R.layout.password_dialog);
+                    dialog.setTitle("Title...");
+                    dialog.show();
+                    */
+                }
+                else {
+                    goToPerformance(performances.get(index));
+
+                    // Falta fazer Udpate À lista de performances
+                    // Enviar para o ecrã de tocar perfomance
+                    Log.d("btn performnce!!!", performances.get(index).getReqPass().toString() + " - " + performances.get(index).getPassword());
+                }
+              }
         }));
     }
     @Override
@@ -125,7 +198,6 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
 
     public void filterPerformances(String text) {
         List<Performance> newList = new ArrayList<Performance>();
-        Log.d("Search", "Ata caralho!!!" + text);
         if(!text.isEmpty()) {
             performances.clear();
 
@@ -144,16 +216,20 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
     // Ir para uma performance
     public void goToPerformance(Performance perf) {
 
-        // Tenho que comçar uma atividade aqui
+        Log.d("Extras Perf Id", perf.getId());
 
         // Esta funcção pode dar jeito porque vai ser preciso enviar informação para a página de play performance
         Intent playPerf = new Intent(context, PlayPerformance.class);
-
+        playPerf.putExtra("id", perf.getId());
         playPerf.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Sem isto vai dar um erro
         context.startActivity(playPerf);
     }
 
-//    @Override
+    public void insertUserInPerformance(FirebaseFirestore db) {
+        /* Inserir aqui o user na performance */
+
+
+    }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         protected TextView date, reqPass, totalParticipants; // Por agora é só esta
         protected ImageView picture;

@@ -46,4 +46,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.714" />
 
+    <Button
+        android:id="@+id/instruments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="152dp"
+        android:layout_marginLeft="152dp"
+        android:layout_marginTop="16dp"
+        app:srcCompat="@mipmap/music_note"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playit" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

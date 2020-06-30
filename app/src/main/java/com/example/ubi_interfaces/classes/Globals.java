@@ -2,9 +2,11 @@ package com.example.ubi_interfaces.classes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -18,12 +20,22 @@ import com.facebook.Profile;
 import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 // Também é  preciso importar a da __google__
 
 import org.json.JSONObject;
+
+import java.util.List;
+import java.util.Map;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -41,6 +53,8 @@ public class Globals {
     public void Globals(Context ctx) {
 
     }
+
+    public static Performance perf;
 
     public static void goToActivity(Context ctx, Class targetClass) {
         Intent goback = new Intent(ctx, targetClass);
@@ -61,12 +75,15 @@ public class Globals {
 //    }
 
     //Não tou a coseguit.........................................................................................................
-    public static User getCurrentUser() {
+    public static User getCurrentUser(Map<String, Integer>... achis) {
         /* Get firebase instance */
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
         FirebaseUser fUser = fAuth.getCurrentUser();
         /* Get Facebook user (if any) */
         Profile fbUser = Profile.getCurrentProfile();
+
+        FirebaseFirestore db;
+
         User user;
         String id = null, email = null, name = null, authType = null;
 
@@ -91,7 +108,11 @@ public class Globals {
             /* Para o email devo precisar de usar o graphRequest */
         }
 
-        user = new User(id, email, name, authType);
-        return user;
+        db = FirebaseFirestore.getInstance();
+        boolean done = false;
+        boolean started = false;
+//        final User[] anodaOne = new User[1]; que caralhos é isto...
+
+        return new User(id, email, name, authType, achis.length != 0 ? achis[0] : null);
     }
 }

@@ -16,9 +16,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
-//import com.google.firebase.database.DatabaseError;
-//import com.google.firebase.database.DatabaseReference;
-//import com.google.firebase.database.FirebaseDatabase;
 import com.example.ubi_interfaces.R;
 import com.example.ubi_interfaces.classes.Globals;
 import com.example.ubi_interfaces.classes.Performance;
@@ -74,18 +71,20 @@ public class PerformancesActivity extends Fragment {
         // Vai ter que ser um filtro pelas que o user criou ou participou, e vamos ter que distinguir las
         db.collection("performances")
                 .orderBy("date", Query.Direction.DESCENDING)
-//                .whereGreaterThan("date", Timestamp.now().toDate())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                        if(task.isSuccessful()) {
                            for (QueryDocumentSnapshot document : task.getResult()) {
+                               Log.d("task", document.getId());
                                Performance perf = document.toObject(Performance.class);
 
                                 Log.d("Dates Comparing", "Date: " + new Timestamp(perf.getDate()).toDate() + " ---- " + Timestamp.now().toDate().toString() + " --- "
                                         + (Long.parseLong(String.valueOf(new Timestamp(perf.getDate()).getSeconds())) > Long.parseLong(String.valueOf(Timestamp.now().getSeconds()))));
+
                                if(Long.parseLong(String.valueOf(new Timestamp(perf.getDate()).getSeconds())) > Long.parseLong(String.valueOf(Timestamp.now().getSeconds()))){
+                                   perf.setId(document.getId());
                                    performances.add(perf);
                                }
                            }

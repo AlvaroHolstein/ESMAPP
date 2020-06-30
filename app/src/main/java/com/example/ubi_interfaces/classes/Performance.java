@@ -17,7 +17,7 @@ public class Performance {
     private String adminId;
     private int duration;
     private List<String> participantsId;
-    private int id;
+    private String id;
     private String picture;
 //    private boolean active;
 
@@ -69,7 +69,7 @@ public class Performance {
         this.participantsId = participantsId;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -103,7 +103,7 @@ public class Performance {
         return participantsId;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -111,10 +111,10 @@ public class Performance {
     public Date getDate() { return date.toDate(); }
 
     public Boolean getReqPass() {
-        if(this.password != "") reqPass = false;
-        else reqPass = true;
+        if(this.password == "") this.reqPass = false;
+        else this.reqPass = true;
 
-        return reqPass;
+        return this.reqPass;
     }
 
     public int getTotalParticipants() {

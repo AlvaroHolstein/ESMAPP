@@ -112,7 +112,6 @@ public class RecyclerProfilePerformances extends RecyclerView.Adapter<RecyclerPr
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         /* aQUI É ONDE SE VÃO BUSCAR TODOS OS ELEMENTOS NECESSÁRIOS DO ui*/
-
         ImageView picture;
         TextView location, date, totalParticipants;
 

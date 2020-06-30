@@ -118,7 +118,7 @@ public class Signup extends AppCompatActivity {
             }
         });
 
-        /* Bot\ao para ir para o login */
+        /* Botão para ir para o login */
         goLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

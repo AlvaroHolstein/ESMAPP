@@ -151,54 +151,71 @@ public class CreatePerformance extends Fragment {
                     Log.e("Date Error", ex.toString());
                 }
 
-                // Default image once upon a time
-                // "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.vox-cdn.com%2Fthumbor%2FFgiZSpHjp1vcKkV0PrdRppJszhA%3D%2F0x0%3A960x960%2F1200x800%2Ffilters%3Afocal(404x404%3A556x556)%2Fcdn.vox-cdn.com%2Fuploads%2Fchorus_image%2Fimage%2F58799523%2F14915318_10155148305236754_7471955098066766739_n.0.png&f=1&nofb=1",
-                Performance newPerf = new Performance(new Timestamp(new Date(date.getTime().toString())),
-                        accessCodeSwitch.isChecked(),
-                        Integer.parseInt(maxCapacityValue),
-                        locationValue,
-                        imageNameGlobal == null || imageNameGlobal == "" ? "bar.jpg" : imageNameGlobal, // bar.jpg default para quando não há foto
-                        accessCodeValue,
-                        new ArrayList<String>());
+                Log.d("PASSOW ??? ", "Só para ver se passou - " + String.valueOf(accessCodeSwitch.isChecked()) + " - " + accessCodeValue + " - " + maxCapacityValue.toString());
 
-                Log.d("savePerf",
-                "Location: " + newPerf.getLocation() +
-                "\n accessCodeSwitch: " + newPerf.getReqPass() +
-                "\n accessCode: " +  newPerf.getPassword() +
-                "\n timeStart: " + newPerf.getDate()); // Os valores estão corretos.
+                /*Max capacity*/
+                if(maxCapacityValue.equals("")) {
+                    maxCapacity.setError("Required... Hint: 999");
+                    return;
+                }
+                /*password*/
+                else if(accessCodeSwitch.isChecked() && accessCodeValue.equals("")) {
+                    accessCode.setError("Needs to have a password");
+                    return;
+                }
+                else {
 
 
-                Map<String, Object> performance = new HashMap<>();
-                performance.put("active", false);
-                performance.put("adminId", "999"); //Ainda é preciso tratar do utilizador direito para fazer esta parte
-                performance.put("date", newPerf.getDate());
-                performance.put("createDate", Timestamp.now());
+                    // Default image once upon a time
+                    // "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.vox-cdn.com%2Fthumbor%2FFgiZSpHjp1vcKkV0PrdRppJszhA%3D%2F0x0%3A960x960%2F1200x800%2Ffilters%3Afocal(404x404%3A556x556)%2Fcdn.vox-cdn.com%2Fuploads%2Fchorus_image%2Fimage%2F58799523%2F14915318_10155148305236754_7471955098066766739_n.0.png&f=1&nofb=1",
+                    Performance newPerf = new Performance(new Timestamp(new Date(date.getTime().toString())),
+                            accessCodeSwitch.isChecked(),
+                            Integer.parseInt(maxCapacityValue),
+                            locationValue,
+                            imageNameGlobal == null || imageNameGlobal == "" ? "bar.jpg" : imageNameGlobal, // bar.jpg default para quando não há foto
+                            accessCodeValue,
+                            new ArrayList<String>());
+
+                    Log.d("savePerf",
+                            "Location: " + newPerf.getLocation() +
+                                    "\n accessCodeSwitch: " + newPerf.getReqPass() +
+                                    "\n accessCode: " +  newPerf.getPassword() +
+                                    "\n timeStart: " + newPerf.getDate()); // Os valores estão corretos.
+
+
+                    Map<String, Object> performance = new HashMap<>();
+
+                    performance.put("active", false);
+                    performance.put("adminId", "999"); //Ainda é preciso tratar do utilizador direito para fazer esta parte
+                    performance.put("date", newPerf.getDate());
+                    performance.put("createDate", Timestamp.now());
 //                performance.put("duration", 999); Isto é um campo para meter depois?
 //                performance.put("id", 999);
-                performance.put("location", newPerf.getLocation());
-                performance.put("picture", newPerf.getPicture());
-                performance.put("password", newPerf.getReqPass() ? newPerf.getPassword() : "");
-                performance.put("participantsId", newPerf.getParticipantsId()); // Vai ser sempre vazio mas é preciso mandar isto
-                performance.put("totalParticipants", newPerf.getTotalParticipants());
+                    performance.put("location", newPerf.getLocation());
+                    performance.put("picture", newPerf.getPicture());
+                    performance.put("password", newPerf.getReqPass() ? newPerf.getPassword() : "");
+                    performance.put("participantsId", newPerf.getParticipantsId()); // Vai ser sempre vazio mas é preciso mandar isto
+                    performance.put("totalParticipants", newPerf.getTotalParticipants());
 
 
-                // Guardar a performance na Base de dados
-                db.collection("performances").document()
-                        .set(performance)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                // E isto só devia acontecer se tudo for gravado com sucesso
-                                Globals.goToFragment(new PerformancesActivity(), getFragmentManager());
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.e("firestore", e.toString());
-                                e.printStackTrace();
-                            }
-                        });
+                    // Guardar a performance na Base de dados
+                    db.collection("performances").document()
+                            .set(performance)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // E isto só devia acontecer se tudo for gravado com sucesso
+                                    Globals.goToFragment(new PerformancesActivity(), getFragmentManager());
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("firestore", e.toString());
+                            e.printStackTrace();
+                        }
+                    });
 
+                }
             }
         });
 
