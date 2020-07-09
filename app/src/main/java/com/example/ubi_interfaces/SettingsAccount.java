@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.ubi_interfaces.classes.Globals;
+import com.example.ubi_interfaces.ui.performances.PerformancesActivity;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,7 +37,7 @@ public class SettingsAccount extends Fragment {
     boolean confirmLogout = true;
 
     RelativeLayout logout;
-    Button confirmChanges;
+    Button confirmChanges, goBack;
 
     EditText username, confirmPass, newPass;
      public View onCreateView(@NonNull LayoutInflater inflater,
@@ -147,6 +148,14 @@ public class SettingsAccount extends Fragment {
                             Snackbar.LENGTH_SHORT)
                             .show();
                 }
+             }
+         });
+
+         goBack = root.findViewById(R.id.imageView4);
+         goBack.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 Globals.goToFragment(new PerformancesActivity(), getFragmentManager());
              }
          });
          return root;

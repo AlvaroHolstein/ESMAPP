@@ -11,14 +11,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
+
+import com.example.ubi_interfaces.classes.Globals;
+import com.example.ubi_interfaces.ui.performances.PerformancesActivity;
 
 public class SettingsSound extends Fragment {
 
     SeekBar seekBar;
     AudioManager audioManager;
     Button button, button2;
+    ImageView goBack;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +54,14 @@ public class SettingsSound extends Fragment {
                 audioManager.adjustVolume(AudioManager.ADJUST_RAISE, AudioManager.FLAG_PLAY_SOUND);
                 seekBar.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
                 Toast.makeText(getContext(),"Volume Up", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        goBack = root.findViewById(R.id.imageView10);
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Globals.goToFragment(new PerformancesActivity(), getFragmentManager());
             }
         });
         return root;

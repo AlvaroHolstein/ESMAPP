@@ -18,8 +18,8 @@
         app:layout_constraintBottom_toTopOf="@+id/achivId"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/achivIcon"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/achievement_1_unranked" />
+        app:layout_constraintTop_toTopOf="parent"/>
+<!--        app:srcCompat="@drawable/achievement_1_unranked" -->
 
     <TextView
         android:id="@+id/achivIcon"
