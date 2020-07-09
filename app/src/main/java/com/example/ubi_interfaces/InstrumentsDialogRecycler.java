@@ -66,6 +66,7 @@ public class InstrumentsDialogRecycler extends RecyclerView.Adapter<InstrumentsD
 
         /* NAME */
         vh.name.setText(instrument.getName());
+        Log.d("Name", instrument.getName());
         /* ID (for later) */
         vh.instId.setText(String.valueOf(instrument.getInstrumentId()));
 
@@ -131,7 +132,7 @@ public class InstrumentsDialogRecycler extends RecyclerView.Adapter<InstrumentsD
         TextView name, instId;
         LinearLayout container;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
 
             image = itemView.findViewById(R.id.instrument_image);

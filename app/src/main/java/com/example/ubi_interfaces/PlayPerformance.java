@@ -3,11 +3,17 @@ package com.example.ubi_interfaces;
 import android.annotation.SuppressLint;
 
 import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,11 +26,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ubi_interfaces.classes.Globals;
 import com.example.ubi_interfaces.classes.Performance;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -39,13 +52,14 @@ public class PlayPerformance extends AppCompatActivity {
     TextView numberOfUsers, currentInst;
     /* Usar uma imageView para mostrar o instrumento selecionado */
     Button chooseInstrument;
+    ImageView imageView;
 
     /* Firebase */
     FirebaseFirestore db;
 
     // Socekt
     private Socket socket;
-    private String uri = "http://192.168.1.6:3001";
+    private String uri = "http://192.168.1.4:3001";
     private String username = "user1";
     private String perfId;
 
@@ -63,6 +77,9 @@ public class PlayPerformance extends AppCompatActivity {
         chooseInstrument = findViewById(R.id.instruments);
         currentInst = findViewById(R.id.current_instrument);
         currentInst.setText(Globals.instrument == null ? "None" : Globals.instrument.getName());
+
+        imageView = findViewById(R.id.imageView8);
+//        imageView.getBackground().setAlpha(45);
 
         /* Get Performance Information */
         perfId = getIntent().getStringExtra("id");
@@ -90,6 +107,32 @@ public class PlayPerformance extends AppCompatActivity {
             ex.printStackTrace();
         }
 
+        Map<String, Object> updatePerf = new HashMap<>();
+        List<String> newId = Globals.perf.getParticipantsId();
+        Boolean save = true;
+        for(String id : Globals.perf.getParticipantsId()) {
+            if(Globals.getCurrentUser().getId().equals(id)) {
+                save = false;
+            }
+        }
+
+        if(save) {
+            newId.add(Globals.getCurrentUser().getId());
+            updatePerf.put("participantsId", newId);
+            db.collection("performances").document(perfId)
+                    .update(updatePerf)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Log.d("TA", "MOS");
+
+                            if(task.isSuccessful()) {
+                                Log.d("Play", "Funcionou");
+                            }
+                        }
+                    });
+        }
+
         /* Sitio para tocar */
         checkTouch = findViewById(R.id.playit);
 
@@ -97,7 +140,7 @@ public class PlayPerformance extends AppCompatActivity {
         socket.connect();
 
         // Avisar quem entrou, Vai ser substituido pelo nome do utilizador
-        socket.emit("join", "Utilizador:" + username);
+        socket.emit("join", Globals.getCurrentUser().getId());
 
         /* Aqui é onde estamos à escuta de Eventos
         * Depois deve poder ser manda para fora do onCreate */
@@ -109,7 +152,45 @@ public class PlayPerformance extends AppCompatActivity {
             @Override
             public void call(Object... args) {
                 try {
-                    String text = String.valueOf(args);
+                    db.collection("perfromances").document(Globals.perf.getId())
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if(task.isSuccessful()) {
+                                        DocumentSnapshot doc = task.getResult();
+                                        Performance perf = doc.toObject(Performance.class);
+                                        Globals.perf = perf;
+
+                                        Boolean save = true;
+                                        for(String id : perf.getParticipantsId()) {
+                                            if(Globals.getCurrentUser().getId().equals(id)) {
+                                                save = false;
+                                            }
+                                        }
+
+                                        if(save) {
+                                            Map<String, Object> updatePerf = new HashMap<>();
+                                            List<String> newId = Globals.perf.getParticipantsId();
+                                            newId.add(Globals.getCurrentUser().getId());
+                                            updatePerf.put("participantsId", newId);
+                                            db.collection("performances").document(perfId)
+                                                    .update(updatePerf)
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            Log.d("TA", "MOS");
+
+                                                            if(task.isSuccessful()) {
+                                                                Log.d("Play", "Funcionou");
+                                                            }
+                                                        }
+                                                    });
+                                        }
+                                    }
+                                }
+                            });
+
                 } catch (Exception ex) {
                     Log.w("Error !!!", ex);
                     ex.printStackTrace();
@@ -120,6 +201,9 @@ public class PlayPerformance extends AppCompatActivity {
             public void call(Object... args) {
                 try {
                     String nUsers = String.valueOf(args);
+                    Log.d("Number of USers", nUsers + " -- " + Arrays.toString(args) + " -- " + args[0].toString());
+
+
                 } catch (Exception ex) {
                     Log.w("Error !!!", ex);
                     ex.printStackTrace();
@@ -141,7 +225,8 @@ public class PlayPerformance extends AppCompatActivity {
 
                         if(contador > 5) { // Para determinar o "ritmo" podemos fazer por contador ou por timeouts mas JAVA.....
                             contador = 0;
-                            socket.emit("musicnote", x + ":" + y);
+                            Log.d("notas", x*0.1 + ":" + y *0.1);
+                            socket.emit("musicnote", x *0.1 + ":" + y* 0.1);
                         }
                     break;
                         // Estes os dois ainda não tenho a certeza de como funceminam
@@ -181,6 +266,37 @@ public class PlayPerformance extends AppCompatActivity {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
 
                 choose.show();
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                imageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                /* Desenhar Linhas */
+                Bitmap bitmap = Bitmap.createBitmap(imageView.getWidth(), 5, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap);
+                canvas.drawColor(Color.WHITE);
+                Paint paint = new Paint();
+                paint.setColor(Color.WHITE);
+                paint.setStyle(Paint.Style.STROKE);
+                paint.setStrokeWidth(8);
+                paint.setAntiAlias(true);
+                int offset = 50;
+                canvas.drawLine(
+                        offset, canvas.getHeight() / 2, canvas.getWidth() - offset, canvas.getHeight() / 2, paint);
+
+                canvas.drawLine(
+                        offset, canvas.getHeight() - 30, canvas.getWidth() - offset, canvas.getHeight() - 30, paint);
+                canvas.drawLine(
+                        offset, 0, 100, 100, paint);
+                imageView.setImageBitmap(bitmap);
+
             }
         });
     }

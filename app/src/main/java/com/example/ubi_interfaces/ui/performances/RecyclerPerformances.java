@@ -70,7 +70,7 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
 
         fs = FirebaseStorage.getInstance();
         storageRef = fs.getReference();
-        index = i;
+        this.index = i;
         final ViewHolder auxVh = vh;
 
         if(perf.getPicture() == null) {
@@ -121,35 +121,24 @@ public class RecyclerPerformances extends RecyclerView.Adapter<RecyclerPerforman
         vh.btnParticipate.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Button goToPerf", String.valueOf(performances.get(index)));
-                if(performances.get(index).getReqPass()) {
-                    Globals.perf = performances.get(index);
+                Integer position = new Integer(index);
+
+                Log.d("Button goToPerf", performances.get(position).getLocation()+ " -- " + position);
+                if(performances.get(position).getReqPass()) {
+                    Globals.perf = performances.get(position);
 
                     showDialog();
-//                    LayoutInflater li = LayoutInflater.from(context);
-//                    View passCheck = li.inflate(R.layout.password_dialog, null);
-
-//                    AlertDialog.Builder check = new AlertDialog.Builder(context, R.layout.password_dialog);
-
-
-
-//
-//                    AlertDialog alertDialog = check.create();
-//                    alertDialog.setView(passCheck);
-//                    alertDialog.show();
-                    /*
-                    Dialog dialog = new Dialog(context);
-                    dialog.setContentView(R.layout.password_dialog);
-                    dialog.setTitle("Title...");
-                    dialog.show();
-                    */
                 }
                 else {
-                    goToPerformance(performances.get(index));
+                    Log.d("Button goToPerf !!!!!", performances.get(position).getLocation() + " -- " + position);
+
+                    Globals.perf = performances.get(position);
+
+                    goToPerformance(performances.get(position));
 
                     // Falta fazer Udpate À lista de performances
                     // Enviar para o ecrã de tocar perfomance
-                    Log.d("btn performnce!!!", performances.get(index).getReqPass().toString() + " - " + performances.get(index).getPassword());
+                    Log.d("btn performnce!!!", performances.get(position).getReqPass().toString() + " - " + performances.get(position).getPassword());
                 }
               }
         }));

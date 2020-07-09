@@ -148,7 +148,7 @@ public class PerformancesActivity extends Fragment {
                             Globals.instruments.clear(); // Limpar o array
                             for(QueryDocumentSnapshot doc : task.getResult()) {
                                 Instrument instr = doc.toObject(Instrument.class);
-
+                                Log.d("Instrumentos", instr.getName());
                                 Globals.instruments.add(instr);
                             }
                         }
