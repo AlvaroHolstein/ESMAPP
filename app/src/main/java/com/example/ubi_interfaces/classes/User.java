@@ -31,6 +31,7 @@ public class User {
         this.authType = authType;
         this.email = email;
         this.name = name;
+        Log.d("Achievements length: ",achievements.length+" coisos ");
         this.achievements = achievements.length != 0 ? achievements[0] : null;
     }
 
