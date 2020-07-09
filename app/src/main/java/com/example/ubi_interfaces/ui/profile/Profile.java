@@ -126,14 +126,14 @@ public class Profile extends Fragment {
                         else
                         */
                         if (us.getPicture().startsWith("http")) {
-                            Picasso.get().load("https://graph.facebook.com/" + currentUser.getId() + "/picture?type=normal").resize(50, 50).into(profilePic);
+                            Picasso.get().load("https://graph.facebook.com/" + currentUser.getId() + "/picture?type=normal").fit().centerCrop().into(profilePic);
                         }
                         else {
                             sr.child(us.getPicture()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     // Got the download URL for 'users/me/profile.png'
-                                    Picasso.get().load(uri.toString()).resize(50, 50).into(profilePic);
+                                    Picasso.get().load(uri.toString()).fit().centerCrop().into(profilePic);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
