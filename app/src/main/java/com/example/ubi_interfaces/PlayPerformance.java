@@ -292,8 +292,6 @@ public class PlayPerformance extends AppCompatActivity {
                         offset, canvas.getHeight() / 2, canvas.getWidth() - offset, canvas.getHeight() / 2, paint);
 
                 canvas.drawLine(
-                        offset, canvas.getHeight() - 30, canvas.getWidth() - offset, canvas.getHeight() - 30, paint);
-                canvas.drawLine(
                         offset, 0, 100, 100, paint);
                 imageView.setImageBitmap(bitmap);
 

@@ -55,6 +55,8 @@
         android:id="@+id/instruments"
         android:layout_width="100dp"
         android:layout_height="40dp"
+        android:maxWidth="100dp"
+        android:maxHeight="40dp"
         android:layout_marginStart="144dp"
         android:layout_marginLeft="144dp"
         android:layout_marginTop="32dp"
